@@ -1,0 +1,1 @@
+Demo project for Windows Phone 7 SDK
