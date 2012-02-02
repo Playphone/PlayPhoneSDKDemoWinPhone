@@ -28,24 +28,26 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <StackPanel Orientation="Vertical">
-                <ListBox Name="scores" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
+<!--             <StackPanel Orientation="Vertical"> -->
+                <ListBox Name="scores">
+ <!-- HorizontalContentAlignment="Stretch" -->
+                    <!-- 
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
                         </Style>
-                    </ListBox.ItemContainerStyle>
+                    </ListBox.ItemContainerStyle> -->
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="{Binding Avatar}"/>
-                                <TextBlock Text="{Binding UserName}"/>
-                                <TextBlock Text="{Binding Score}"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,12,0,12">
+                                <Image Height="80" Width="80" Source="{Binding Avatar}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding UserName}" Padding="5,0,0,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Score}" Padding="5,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-            </StackPanel>
+            <!-- </StackPanel> -->
         </Grid>
     </Grid>
  
