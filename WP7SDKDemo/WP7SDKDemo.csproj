@@ -49,13 +49,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Phone" />
+    <Reference Include="Microsoft.Phone.Controls.Toolkit, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b772ad94eb9ca604, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Interop" />
-    <Reference Include="PlayPhoneMultiNet">
-      <HintPath>lib\PlayPhoneMultiNet.dll</HintPath>
-    </Reference>
-    <Reference Include="SmartFoxClientAPI_Silverlight">
-      <HintPath>lib\SmartFoxClientAPI_Silverlight.dll</HintPath>
-    </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -67,9 +62,26 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="common\BuddyListItem.cs" />
+    <Compile Include="common\Leaderboards.cs" />
     <Compile Include="common\MainListItem.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="miniview\BuddyInfo.xaml.cs">
+      <DependentUpon>BuddyInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="miniview\leaderboards\GameLeaderboard.xaml.cs">
+      <DependentUpon>GameLeaderboard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="miniview\leaderboards\LeadersList.xaml.cs">
+      <DependentUpon>LeadersList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="miniview\leaderboards\SimpleLeaderboard.xaml.cs">
+      <DependentUpon>SimpleLeaderboard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="miniview\leaderboards\UserLeaderboard.xaml.cs">
+      <DependentUpon>UserLeaderboard.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="views\Achievements.xaml.cs">
@@ -118,6 +130,26 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Page Include="MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="miniview\BuddyInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="miniview\leaderboards\GameLeaderboard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="miniview\leaderboards\LeadersList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="miniview\leaderboards\SimpleLeaderboard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="miniview\leaderboards\UserLeaderboard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -187,6 +219,13 @@
     </Content>
     <Content Include="res\SplashScreenImage.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PlayPhoneSDKWP7\SDK\PlayPhoneMultiNet\PlayPhoneMultiNet.csproj">
+      <Project>{9D730A86-297E-438E-B629-AF14F6BAF03C}</Project>
+      <Name>PlayPhoneMultiNet</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

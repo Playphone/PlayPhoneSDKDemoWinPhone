@@ -1,5 +1,5 @@
 ﻿<phone:PhoneApplicationPage 
-    x:Class="WP7SDKDemo.views.Social"
+    x:Class="WP7SDKDemo.miniview.leaderboards.LeadersList"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -23,18 +23,13 @@
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
             <TextBlock x:Name="ApplicationTitle" Text="MY APPLICATION" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock x:Name="PageTitle" Text="Social" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock x:Name="PageTitle" Text="page name" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <StackPanel Orientation="Vertical">
-                <Button Click="loadBuddies"  Width="Auto" Height="80" VerticalAlignment="Top">
-                    <Button.Content>
-                        <TextBlock Text="Get it!"/>
-                    </Button.Content>
-                </Button>
-                <ListBox Name="buddy_list" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
+                <ListBox Name="scores" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
@@ -42,24 +37,18 @@
                     </ListBox.ItemContainerStyle>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Button Click="showDetails" HorizontalContentAlignment="Stretch">
-                                <Button.Content>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Image Name="avatar" Source="{Binding Avatar}"  HorizontalAlignment="Left" Stretch="None" />
-                                        <StackPanel Orientation="Vertical">
-                                            <TextBlock Name="name" Text="{Binding Name}"/>
-                                            <TextBlock Name="status" Text="{Binding Status}"/>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="{Binding Avatar}"/>
+                                <TextBlock Text="{Binding UserName}"/>
+                                <TextBlock Text="{Binding Score}"/>
+                            </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
             </StackPanel>
         </Grid>
     </Grid>
-
+ 
     <!--Sample code showing usage of ApplicationBar-->
     <!--<phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">

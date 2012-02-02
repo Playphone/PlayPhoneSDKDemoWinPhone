@@ -12,6 +12,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using PlayPhone.MultiNet.Core.WS.Data;
 
 namespace WP7SDKDemo
 {
@@ -22,6 +23,8 @@ namespace WP7SDKDemo
         /// </summary>
         /// <returns>The root frame of the Phone Application.</returns>
         public PhoneApplicationFrame RootFrame { get; private set; }
+
+        public MNWSBuddyListItem choosenBuddy = null;
 
         /// <summary>
         /// Constructor for the Application object.

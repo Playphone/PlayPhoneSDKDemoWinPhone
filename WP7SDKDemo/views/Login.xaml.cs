@@ -17,14 +17,14 @@ namespace WP7SDKDemo.views
 {
     public partial class Login : PhoneApplicationPage
     {
-        private bool isLoggedIn = false;
+        private bool _isLoggedIn = false;
 
-        public bool IsLoggedIn
+        public bool isLoggedIn
         {
-            get { return isLoggedIn; }
+            get { return _isLoggedIn; }
             set 
-            { 
-                isLoggedIn = value;
+            {
+                _isLoggedIn = value;
                 if (value)
                 {
                     this.caption.Text = "Logout";
@@ -39,7 +39,8 @@ namespace WP7SDKDemo.views
         public Login()
         {
             InitializeComponent();
-            MNDirect.GetSession().MNSessionStatusChanged += new MNSession.MNSessionStatusChangedEventHandler(this.onUserChanged);
+            MNDirect.GetSession().SessionStatusChanged += new MNSession.SessionStatusChangedEventHandler(this.onUserChanged);
+            isLoggedIn = MNDirect.GetSession().IsUserLoggedIn();
         }
 
         private void Loginout_Click(object sender, RoutedEventArgs e)
@@ -57,7 +58,7 @@ namespace WP7SDKDemo.views
 
         private void onUserChanged(int newStatus, int oldStatus)
         {
-            isLoggedIn = MNDirect.GetSession().IsUserLoggedIn();
+            isLoggedIn = newStatus >= MNConst.MN_LOGGEDIN;
         }
     }
 }

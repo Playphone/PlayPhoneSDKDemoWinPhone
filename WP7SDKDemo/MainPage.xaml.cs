@@ -29,7 +29,7 @@ namespace WP7SDKDemo
         {
             InitializeComponent();
             MNDirect.Init(GAME_ID, MNDirect.MakeGameSecretByComponents(APISECRET1, APISECRET2, APISECRET3, APISECRET4));
-            MNDirectUIButton.Show();
+            MNDirectButton.Show();
 
             initList();
         }
@@ -39,7 +39,7 @@ namespace WP7SDKDemo
             List<MainListItem> data = new List<MainListItem>();
 
             data.Add(new MainListItem("1.Required integration"));
-            data.Add(new MainListItem("    Login user", "/views/Login.xaml" ));
+            data.Add(new MainListItem("    Login user", "/views/Login.xaml"));
             data.Add(new MainListItem("    Dashboard", "/views/Dashboard.xaml"));
             data.Add(new MainListItem("    Virtual economy", "/views/VEconomy.xaml"));
             data.Add(new MainListItem("2.Advanced features"));

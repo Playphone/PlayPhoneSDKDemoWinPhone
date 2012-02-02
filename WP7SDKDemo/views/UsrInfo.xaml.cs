@@ -21,7 +21,7 @@ namespace WP7SDKDemo.views
         public UsrInfo()
         {
             InitializeComponent();
-            MNDirect.GetSession().MNSessionStatusChanged += new MNSession.MNSessionStatusChangedEventHandler(this.onStatusChanged);
+            MNDirect.GetSession().SessionStatusChanged += new MNSession.SessionStatusChangedEventHandler(this.onStatusChanged);
             if (MNDirect.GetSession().IsUserLoggedIn())
             {
                 onStatusChanged(0, 0);

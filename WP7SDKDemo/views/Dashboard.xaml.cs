@@ -23,12 +23,12 @@ namespace WP7SDKDemo.views
 
         private void showButton(object sender, RoutedEventArgs e)
         {
-            MNDirectUIButton.Show();
+            MNDirectButton.Show();
         }
 
         private void hideButton(object sender, RoutedEventArgs e)
         {
-            MNDirectUIButton.Hide();
+            MNDirectButton.Hide();
         }
 
         private void showDashboard(object sender, RoutedEventArgs e)

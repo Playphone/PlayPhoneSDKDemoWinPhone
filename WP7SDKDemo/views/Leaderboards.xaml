@@ -27,7 +27,25 @@
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0"></Grid>
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <StackPanel Orientation="Vertical">
+                <Button Click="showSimple" Width="Auto" Height="80">
+                    <Button.Content>
+                        <TextBlock Text="Simple leaderboard"/>
+                    </Button.Content>
+                </Button>
+                <Button Click="showGame" Width="Auto" Height="80">
+                    <Button.Content>
+                        <TextBlock Text="Game leaderboard"/>
+                    </Button.Content>
+                </Button>
+                <Button Click="showUser" Width="Auto" Height="80">
+                    <Button.Content>
+                        <TextBlock Text="User leaderboard"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </Grid>
     </Grid>
  
     <!--Sample code showing usage of ApplicationBar-->
