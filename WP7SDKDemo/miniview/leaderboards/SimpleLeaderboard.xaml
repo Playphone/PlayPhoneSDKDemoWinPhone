@@ -10,7 +10,7 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Portrait" Orientation="Portrait"
+    SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
     shell:SystemTray.IsVisible="True">
 
@@ -29,51 +29,53 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <StackPanel Orientation="Vertical">
-                <toolkit:ListPicker x:Name="complexityList">
-                    <toolkit:ListPicker.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}" Width="Auto"/>
-                        </DataTemplate>
-                    </toolkit:ListPicker.ItemTemplate>
-                    <toolkit:ListPicker.FullModeItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}" Width="Auto"/>
-                        </DataTemplate>
-                    </toolkit:ListPicker.FullModeItemTemplate>
-                </toolkit:ListPicker>
+            <ScrollViewer>
+                <StackPanel Orientation="Vertical">
+                    <toolkit:ListPicker x:Name="complexityList">
+                        <toolkit:ListPicker.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" Width="Auto"/>
+                            </DataTemplate>
+                        </toolkit:ListPicker.ItemTemplate>
+                        <toolkit:ListPicker.FullModeItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" Width="Auto"/>
+                            </DataTemplate>
+                        </toolkit:ListPicker.FullModeItemTemplate>
+                    </toolkit:ListPicker>
 
-                <toolkit:ListPicker x:Name="scopeList">
-                    <toolkit:ListPicker.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}" Width="Auto"/>
-                        </DataTemplate>
-                    </toolkit:ListPicker.ItemTemplate>
-                    <toolkit:ListPicker.FullModeItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}" Width="Auto"/>
-                        </DataTemplate>
-                    </toolkit:ListPicker.FullModeItemTemplate>
-                </toolkit:ListPicker>
+                    <toolkit:ListPicker x:Name="scopeList">
+                        <toolkit:ListPicker.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" Width="Auto"/>
+                            </DataTemplate>
+                        </toolkit:ListPicker.ItemTemplate>
+                        <toolkit:ListPicker.FullModeItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" Width="Auto"/>
+                            </DataTemplate>
+                        </toolkit:ListPicker.FullModeItemTemplate>
+                    </toolkit:ListPicker>
 
-                <toolkit:ListPicker x:Name="periodList">
-                    <toolkit:ListPicker.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}" Width="Auto"/>
-                        </DataTemplate>
-                    </toolkit:ListPicker.ItemTemplate>
-                    <toolkit:ListPicker.FullModeItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}" Width="Auto"/>
-                        </DataTemplate>
-                    </toolkit:ListPicker.FullModeItemTemplate>
-                </toolkit:ListPicker>
-                <Button Click="loadLeaderboard" Width="Auto" Height="80">
-                    <Button.Content>
-                        <TextBlock Text="Load"/>
-                    </Button.Content>
-                </Button>
-            </StackPanel>
+                    <toolkit:ListPicker x:Name="periodList">
+                        <toolkit:ListPicker.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" Width="Auto"/>
+                            </DataTemplate>
+                        </toolkit:ListPicker.ItemTemplate>
+                        <toolkit:ListPicker.FullModeItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" Width="Auto"/>
+                            </DataTemplate>
+                        </toolkit:ListPicker.FullModeItemTemplate>
+                    </toolkit:ListPicker>
+                    <Button Click="loadLeaderboard" Width="Auto" Height="80">
+                        <Button.Content>
+                            <TextBlock Text="Load"/>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
     </Grid>
 

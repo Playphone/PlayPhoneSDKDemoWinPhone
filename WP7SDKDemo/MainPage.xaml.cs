@@ -53,6 +53,7 @@ namespace WP7SDKDemo
             data.Add(new MainListItem("    Room cookies", "/views/RoomCookies.xaml"));
             data.Add(new MainListItem("    Application info", "/views/AppInfo.xaml"));
             data.Add(new MainListItem("    Multinet", "/views/Multinet.xaml"));
+            data.Add(new MainListItem("    Server info", "/views/ServerInfo.xaml"));
             lb1.ItemsSource = data;
         }
 
@@ -63,6 +64,11 @@ namespace WP7SDKDemo
             {
                 this.NavigationService.Navigate(new Uri(item.ViewLocation, UriKind.Relative));
             }
+        }
+
+        protected override void OnOrientationChanged(Microsoft.Phone.Controls.OrientationChangedEventArgs e)
+        {
+            MNDirectUIHelper.changeDashboardOrientation(e.Orientation);
         }
     }
 }

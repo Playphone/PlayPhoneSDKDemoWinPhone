@@ -9,7 +9,7 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Portrait" Orientation="Portrait"
+    SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
     shell:SystemTray.IsVisible="True">
 
@@ -27,9 +27,34 @@
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0"></Grid>
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <StackPanel Orientation="Vertical">
+                <Button Click="joinRandomroom">
+                    <Button.Content>
+                        <TextBlock Text="Join random room"></TextBlock>
+                    </Button.Content>
+                </Button>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Time left:"></TextBlock>
+                    <TextBlock Name="timer_display" Text="0"></TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Click="onDecrease">
+                        <Button.Content>
+                            <TextBlock Text="-10"></TextBlock>
+                        </Button.Content>
+                    </Button>
+                    <Button Click="onIncrease">
+                        <Button.Content>
+                            <TextBlock Text="+10"></TextBlock>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+                <TextBlock Name="tip" TextWrapping="Wrap"/>
+            </StackPanel>
+        </Grid>
     </Grid>
- 
+
     <!--Sample code showing usage of ApplicationBar-->
     <!--<phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">

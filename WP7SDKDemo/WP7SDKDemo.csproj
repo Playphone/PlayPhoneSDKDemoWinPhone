@@ -111,6 +111,9 @@
     <Compile Include="views\RoomCookies.xaml.cs">
       <DependentUpon>RoomCookies.xaml</DependentUpon>
     </Compile>
+    <Compile Include="views\ServerInfo.xaml.cs">
+      <DependentUpon>ServerInfo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="views\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
@@ -186,6 +189,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="views\RoomCookies.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="views\ServerInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

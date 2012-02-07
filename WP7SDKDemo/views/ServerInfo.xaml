@@ -1,5 +1,5 @@
 ﻿<phone:PhoneApplicationPage 
-    x:Class="WP7SDKDemo.miniview.BuddyInfo"
+    x:Class="WP7SDKDemo.views.ServerInfo"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -9,7 +9,7 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
+    SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
     shell:SystemTray.IsVisible="True">
 
@@ -23,35 +23,18 @@
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
             <TextBlock x:Name="ApplicationTitle" Text="MY APPLICATION" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock x:Name="PageTitle" Text="page name" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock x:Name="PageTitle" Text="Server info" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <StackPanel Orientation="Vertical">
-                <StackPanel Orientation="Horizontal">
-                    <Image Name="avatar" HorizontalAlignment="Left" Stretch="None" />
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Name="name" />
-                        <TextBlock Name="status" />
-                    </StackPanel>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="User id: "/>
-                    <TextBlock Name="user_id" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Playing game: "/>
-                    <TextBlock Name="current_game" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Has this game: "/>
-                    <TextBlock Name="this_game" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Is ignored: "/>
-                    <TextBlock Name="ignored" />
-                </StackPanel>
+                <Button Click="downloadInfo"  Width="Auto" Height="80">
+                    <Button.Content>
+                        <TextBlock Text="Download server info"/>
+                    </Button.Content>
+                </Button>
+                <TextBlock x:Name="tips" Width="Auto" TextWrapping="Wrap"/>
             </StackPanel>
         </Grid>
     </Grid>

@@ -10,6 +10,8 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
+using PlayPhone.MultiNet;
+using PlayPhone.MultiNet.Providers;
 
 namespace WP7SDKDemo.views
 {
@@ -18,11 +20,27 @@ namespace WP7SDKDemo.views
         public Achievements()
         {
             InitializeComponent();
+
+            if (MNDirect.GetAchievementsProvider().IsGameAchievementListNeedUpdate())
+            {
+                MNDirect.GetAchievementsProvider().GameAchievementListUpdated += onListUpdated;
+                MNDirect.GetAchievementsProvider().DoGameAchievementListUpdate();
+            }
+            else
+            {
+                onListUpdated();
+            }
         }
 
         private void unlockAchievement(object sender, RoutedEventArgs e)
         {
+            MNDirect.GetAchievementsProvider().UnlockPlayerAchievement(Int32.Parse(achievement_id.Text));
+        }
 
+        private void onListUpdated()
+        {
+            MNAchievementsProvider.GameAchievementInfo[] rawAchievements = MNDirect.GetAchievementsProvider().GetGameAchievementsList();
+            achievements_list.ItemsSource = rawAchievements;
         }
     }
 }

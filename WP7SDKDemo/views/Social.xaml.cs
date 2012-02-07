@@ -38,13 +38,12 @@ namespace WP7SDKDemo.views
 
         private void OnWSRequestCompleted(MNWSResponse ret)
         {
-            List<object> buddies = (List<object>)ret.GetDataForBlock(blockName);
+            List<MNWSBuddyListItem> buddies = (List<MNWSBuddyListItem>)ret.GetDataForBlock(blockName);
             List<BuddyListItem> data = new List<BuddyListItem>();
 
-            foreach (object o in buddies)
+            foreach (MNWSBuddyListItem o in buddies)
             {
-                MNWSBuddyListItem friend = (MNWSBuddyListItem)o;
-                data.Add(new BuddyListItem(friend));
+                data.Add(new BuddyListItem(o));
             }
             this.buddy_list.ItemsSource = data;
         }
