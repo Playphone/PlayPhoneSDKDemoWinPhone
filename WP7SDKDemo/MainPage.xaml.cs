@@ -65,10 +65,5 @@ namespace WP7SDKDemo
                 this.NavigationService.Navigate(new Uri(item.ViewLocation, UriKind.Relative));
             }
         }
-
-        protected override void OnOrientationChanged(Microsoft.Phone.Controls.OrientationChangedEventArgs e)
-        {
-            MNDirectUIHelper.changeDashboardOrientation(e.Orientation);
-        }
     }
 }

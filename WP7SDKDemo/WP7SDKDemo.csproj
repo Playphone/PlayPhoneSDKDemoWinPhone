@@ -49,6 +49,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Phone" />
+    <Reference Include="Microsoft.Phone.Controls, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Controls.Toolkit, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b772ad94eb9ca604, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Interop" />
     <Reference Include="System.Windows" />
@@ -82,6 +83,12 @@
     </Compile>
     <Compile Include="miniview\leaderboards\UserLeaderboard.xaml.cs">
       <DependentUpon>UserLeaderboard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="miniview\veconomy\ItemInfo.xaml.cs">
+      <DependentUpon>ItemInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="miniview\veconomy\UserItems.xaml.cs">
+      <DependentUpon>UserItems.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="views\Achievements.xaml.cs">
@@ -153,6 +160,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="miniview\leaderboards\UserLeaderboard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="miniview\veconomy\ItemInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="miniview\veconomy\UserItems.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

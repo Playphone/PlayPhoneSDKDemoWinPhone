@@ -23,19 +23,16 @@ namespace WP7SDKDemo.views
 
         private void showSimple(object sender, RoutedEventArgs e)
         {
-            MNDebug.debug("Leaderboards showSimple");
             NavigationService.Navigate( new Uri("/miniview/leaderboards/SimpleLeaderboard.xaml", UriKind.RelativeOrAbsolute) );
         }
 
         private void showGame(object sender, RoutedEventArgs e)
         {
-            MNDebug.debug("Leaderboards showGame");
             NavigationService.Navigate(new Uri("/miniview/leaderboards/GameLeaderboard.xaml", UriKind.RelativeOrAbsolute));
         }
 
         private void showUser(object sender, RoutedEventArgs e)
         {
-            MNDebug.debug("Leaderboards showUser");
             NavigationService.Navigate(new Uri("/miniview/leaderboards/UserLeaderboard.xaml", UriKind.RelativeOrAbsolute));
         }
     }
