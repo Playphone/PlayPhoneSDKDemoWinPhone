@@ -13,6 +13,8 @@ using Microsoft.Phone.Controls;
 
 namespace WP7SDKDemo.views
 {
+    using PlayPhone.MultiNet;
+
     public partial class DashboardControl : PhoneApplicationPage
     {
         public DashboardControl()
@@ -22,22 +24,26 @@ namespace WP7SDKDemo.views
 
         private void gotoLoginScreen(object sender, RoutedEventArgs e)
         {
-
+            MNDirect.ExecAppCommand("jumpToUserLogin", null);
+            MNDirectUIHelper.ShowDashboard();
         }
 
         private void gotoLeaderboards(object sender, RoutedEventArgs e)
         {
-
+            MNDirect.ExecAppCommand("jumpToLeaderboard", null);
+            MNDirectUIHelper.ShowDashboard();
         }
 
         private void gotoAchievements(object sender, RoutedEventArgs e)
         {
-
+            MNDirect.ExecAppCommand("jumpToAchievements", null);
+            MNDirectUIHelper.ShowDashboard();
         }
 
         private void gotoHome(object sender, RoutedEventArgs e)
         {
-
+            MNDirect.ExecAppCommand("jumpToUserHome", null);
+            MNDirectUIHelper.ShowDashboard();
         }
     }
 }
