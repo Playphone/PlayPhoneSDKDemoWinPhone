@@ -233,12 +233,10 @@
     <None Include="Properties\WMAppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="res\ApplicationIcon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="res\Background.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="res\ApplicationIcon173.png" />
+    <Content Include="res\ApplicationIcon200.png" />
+    <Content Include="res\ApplicationIcon62.png" />
+    <Content Include="res\ApplicationIcon99.png" />
     <Content Include="res\SplashScreenImage.jpg" />
   </ItemGroup>
   <ItemGroup>
