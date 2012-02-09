@@ -33,7 +33,7 @@ namespace WP7SDKDemo.views
             if (MNDirect.GetSession().IsUserLoggedIn())
             {
                 MNUserInfo info = MNDirect.GetSession().GetMyUserInfo();
-                this.user_avatar.Source = new BitmapImage(new Uri(info.AvatarUrl, UriKind.RelativeOrAbsolute));
+                this.user_avatar.Source = new BitmapImage(new Uri(info.UserAvatarUrl, UriKind.RelativeOrAbsolute));
                 this.user_name.Text = info.UserId.ToString();
                 this.user_id.Text = info.UserId.ToString();
                 this.room_id.Text = MNDirect.GetSession().GetCurrentRoomId().ToString();

@@ -19,5 +19,20 @@ namespace WP7SDKDemo.views
         {
             InitializeComponent();
         }
+
+        private void openPPStore(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void openVirtualItems(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void openUserItems(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/miniview/veconomy/UserItems.xaml", UriKind.RelativeOrAbsolute));
+        }
     }
 }
