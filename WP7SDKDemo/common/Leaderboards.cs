@@ -32,10 +32,12 @@ namespace WP7SDKDemo.common
 
         public static List<Complexity> getFilledList()
         {
-            List<Complexity> ret = new List<Complexity>();
-            ret.Add(new Complexity(Default, "Default"));
-            ret.Add(new Complexity(Simple, "Simple"));
-            ret.Add(new Complexity(Advanced, "Advanced"));
+            List<Complexity> ret = new List<Complexity>
+                                       {
+                                           new Complexity(Default, "Default"),
+                                           new Complexity(Simple, "Simple"),
+                                           new Complexity(Advanced, "Advanced")
+                                       };
             return ret;
         }
     }
@@ -56,9 +58,11 @@ namespace WP7SDKDemo.common
 
         public static List<Scope> getFilledList()
         {
-            List<Scope> ret = new List<Scope>();
-            ret.Add(new Scope(Global, "Global"));
-            ret.Add(new Scope(Local, "Local"));
+            List<Scope> ret = new List<Scope>
+                                  {
+                                      new Scope(Global, "Global"), 
+                                      new Scope(Local, "Local")
+                                  };
             return ret;
         }
     }
@@ -80,10 +84,12 @@ namespace WP7SDKDemo.common
 
         public static List<Period> getFilledList()
         {
-            List<Period> ret = new List<Period>();
-            ret.Add(new Period(Week, "Week"));
-            ret.Add(new Period(Month, "Month"));
-            ret.Add(new Period(All, "All periods"));
+            List<Period> ret = new List<Period>
+                                   {
+                                       new Period(Week, "Week"),
+                                       new Period(Month, "Month"),
+                                       new Period(All, "All periods")
+                                   };
             return ret;
         }
     }

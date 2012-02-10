@@ -35,5 +35,10 @@ namespace WP7SDKDemo.views
         {
             NavigationService.Navigate(new Uri("/miniview/leaderboards/UserLeaderboard.xaml", UriKind.RelativeOrAbsolute));
         }
+
+        private void showPosting(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/miniview/leaderboards/ScorePost.xaml", UriKind.RelativeOrAbsolute));
+        }
     }
 }

@@ -78,6 +78,9 @@
     <Compile Include="miniview\leaderboards\LeadersList.xaml.cs">
       <DependentUpon>LeadersList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="miniview\leaderboards\ScorePost.xaml.cs">
+      <DependentUpon>ScorePost.xaml</DependentUpon>
+    </Compile>
     <Compile Include="miniview\leaderboards\SimpleLeaderboard.xaml.cs">
       <DependentUpon>SimpleLeaderboard.xaml</DependentUpon>
     </Compile>
@@ -152,6 +155,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="miniview\leaderboards\LeadersList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="miniview\leaderboards\ScorePost.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
