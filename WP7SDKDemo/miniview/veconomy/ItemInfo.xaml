@@ -1,5 +1,5 @@
 ﻿<phone:PhoneApplicationPage 
-    x:Class="WP7SDKDemo.miniview.BuddyInfo"
+    x:Class="WP7SDKDemo.miniview.veconomy.ItemInfo"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -9,7 +9,7 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
+    SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
     shell:SystemTray.IsVisible="False">
 
@@ -22,40 +22,38 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock x:Name="ApplicationTitle" Text="Play Phone SDK Demo" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock x:Name="PageTitle" Text="Buddy info" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock x:Name="ApplicationTitle" Text="PlayPhone SDK Demo" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock x:Name="PageTitle" Text="Game item" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical" Width="Auto">
+                <Image Name="icon" Height="150" Width="150"/>
                 <StackPanel Orientation="Horizontal">
-                    <Image Name="avatar" HorizontalAlignment="Left" Stretch="None" />
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Name="name" />
-                        <TextBlock Name="status" />
-                    </StackPanel>
+                    <TextBlock Text="Id: "/>
+                    <TextBlock Name="id"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="User id: "/>
-                    <TextBlock Name="user_id" />
+                    <TextBlock Text="Name: "/>
+                    <TextBlock Name="name"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Playing game: "/>
-                    <TextBlock Name="current_game" />
+                    <TextBlock Text="Model: "/>
+                    <TextBlock Name="model"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Has this game: "/>
-                    <TextBlock Name="this_game" />
+                <StackPanel Orientation="Horizontal" Width="Auto">
+                    <TextBlock Text="Description: "/>
+                    <TextBlock Name="description" TextWrapping="Wrap"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Is ignored: "/>
-                    <TextBlock Name="ignored" />
+                <StackPanel Orientation="Horizontal" Width="Auto">
+                    <TextBlock Text="Params: "/>
+                    <TextBlock Name="additional_params" TextWrapping="Wrap"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
     </Grid>
-
+ 
     <!--Sample code showing usage of ApplicationBar-->
     <!--<phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">

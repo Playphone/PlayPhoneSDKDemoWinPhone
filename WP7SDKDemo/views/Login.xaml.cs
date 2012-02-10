@@ -22,17 +22,10 @@ namespace WP7SDKDemo.views
         public bool isLoggedIn
         {
             get { return _isLoggedIn; }
-            set 
+            set
             {
                 _isLoggedIn = value;
-                if (value)
-                {
-                    this.caption.Text = "Logout";
-                }
-                else
-                {
-                    this.caption.Text = "Login";
-                }
+                this.caption.Text = value ? "Logout" : "Login";
             }
         }
 

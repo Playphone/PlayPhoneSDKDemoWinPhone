@@ -105,17 +105,11 @@ namespace WP7SDKDemo.miniview.leaderboards
             }
         }
 
-        public void OnCompleted(PlayPhone.MultiNet.Providers.MNWSInfoRequestLeaderboard.RequestResult result)
+        public void OnCompleted(MNWSInfoRequestLeaderboard.RequestResult result)
         {
             if (!result.HadError)
             {
-                List<LeaderListItem> leaders = new List<LeaderListItem>();
-
-                foreach (MNWSLeaderboardListItem item in result.GetDataEntry())
-                {
-                    leaders.Add(new LeaderListItem(item));
-                }
-
+                List<LeaderListItem> leaders = result.GetDataEntry().Select(item => new LeaderListItem(item)).ToList();
                 scores.ItemsSource = leaders;
             }
             else

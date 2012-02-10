@@ -24,7 +24,7 @@
     <Tokens>
       <PrimaryToken TokenID="WP7SDKDemoToken" TaskName="_default">
         <TemplateType5>
-          <BackgroundImageURI IsRelative="true" IsResource="false">res\Background.png</BackgroundImageURI>
+          <BackgroundImageURI IsRelative="true" IsResource="false">res\ApplicationIcon173.png</BackgroundImageURI>
           <Count>0</Count>
           <Title>SDK Demo</Title>
         </TemplateType5>

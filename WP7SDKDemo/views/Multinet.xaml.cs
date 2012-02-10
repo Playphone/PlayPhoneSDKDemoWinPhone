@@ -31,14 +31,6 @@ namespace WP7SDKDemo.views
             MNDirect.DoCancelGame += onDoCancelGameHandler;
         }
 
-/*
-        public override void Finalize()
-        {
-            MNDirect.GetSession().SessionStatusChanged -= onSessionStatusChangedHandler;
-            MNDirect.DoFinishGame -= onDoFinishGameHandler;
-            MNDirect.DoCancelGame -= onDoCancelGameHandler;
-        }*/
-
         private void onDecrease(object sender, RoutedEventArgs e)
         {
             totalScore -= 10;
@@ -89,8 +81,7 @@ namespace WP7SDKDemo.views
                     MNDirectUIHelper.HideDashboard();
                     MNDirectButton.Show();
 
-                    counter = new DispatcherTimer();
-                    counter.Interval = TimeSpan.FromMilliseconds(1000);
+                    counter = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(1000)};
                     counter.Tick += countdown_timerHandler;
                     tickNum = GameTime;
                     timer_display.Text = tickNum.ToString();

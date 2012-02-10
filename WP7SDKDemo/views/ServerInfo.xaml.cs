@@ -34,7 +34,7 @@ namespace WP7SDKDemo.views
 
         private void serverInfoItemRequestFailedEventHandler(int key, string error)
         {
-            MessageBox.Show("Could not download server info: " + error);
+            MessageBox.Show(string.Format("Could not download server info: {0}", error));
         }
 
         private void onStatusChanged(int newStatus, int oldStatus)

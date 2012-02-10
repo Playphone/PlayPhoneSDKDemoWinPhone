@@ -15,11 +15,21 @@ using PlayPhone.MultiNet.Providers;
 
 namespace WP7SDKDemo.views
 {
+    using PlayPhone.MultiNet.Core;
+
     public partial class Achievements : PhoneApplicationPage
     {
         public Achievements()
         {
             InitializeComponent();
+
+            MNDirect.GetAchievementsProvider().PlayerAchievementUnlocked += Achievements_PlayerAchievementUnlocked;
+            MNDirect.GetSession().SessionStatusChanged += onStatusChanged;
+
+            if (MNDirect.GetSession().IsUserLoggedIn())
+            {
+                onStatusChanged(0, 0);
+            }
 
             if (MNDirect.GetAchievementsProvider().IsGameAchievementListNeedUpdate())
             {
@@ -30,6 +40,28 @@ namespace WP7SDKDemo.views
             {
                 onListUpdated();
             }
+        }
+
+        private void onStatusChanged(int newstatus, int oldstatus)
+        {
+            if(MNDirect.GetSession().IsUserLoggedIn() && oldstatus < MNConst.MN_LOGGEDIN)
+            {
+                if (MNDirect.GetAchievementsProvider().GetPlayerAchievementsList().Length > 0)
+                {
+                    Achievements_PlayerAchievementUnlocked(-1);
+                }
+            }
+        }
+
+        void Achievements_PlayerAchievementUnlocked(int achievementId)
+        {
+            MNAchievementsProvider.PlayerAchievementInfo[] user_achs =
+                MNDirect.GetAchievementsProvider().GetPlayerAchievementsList();
+            var full_user_achs = 
+                user_achs.Select(
+                                playerAchievementInfo => MNDirect.GetAchievementsProvider().FindGameAchievementById(playerAchievementInfo.Id)
+                                ).ToList();
+            user_achievements_list.ItemsSource = full_user_achs;
         }
 
         private void unlockAchievement(object sender, RoutedEventArgs e)

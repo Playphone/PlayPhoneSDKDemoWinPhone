@@ -19,6 +19,8 @@ using System.Windows.Navigation;
 
 namespace WP7SDKDemo.views
 {
+    using System.Diagnostics;
+
     public partial class Social : PhoneApplicationPage
     {
         private string blockName;
@@ -39,30 +41,25 @@ namespace WP7SDKDemo.views
         private void OnWSRequestCompleted(MNWSResponse ret)
         {
             List<MNWSBuddyListItem> buddies = (List<MNWSBuddyListItem>)ret.GetDataForBlock(blockName);
-            List<BuddyListItem> data = new List<BuddyListItem>();
-
-            foreach (MNWSBuddyListItem o in buddies)
-            {
-                data.Add(new BuddyListItem(o));
-            }
+            List<BuddyListItem> data = buddies.Select(o => new BuddyListItem(o)).ToList();
             this.buddy_list.ItemsSource = data;
         }
 
         private void OnWSRequestFailed(MNWSRequestError ret)
         {
-            MNDebug.error(ret.Message);
+            MessageBox.Show("Request failed: " + ret.Message);
         }
 
         private void showDetails(object sender, RoutedEventArgs e)
         {
             BuddyListItem item = ((Button)sender).DataContext as BuddyListItem;
-            (Application.Current as App).choosenBuddy = item.Source;
+            ((App) Application.Current).choosenBuddy = item.Source;
             NavigationService.Navigate(new Uri("/miniview/BuddyInfo.xaml", UriKind.RelativeOrAbsolute));
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            (Application.Current as App).choosenBuddy = null;
+            ((App) Application.Current).choosenBuddy = null;
             base.OnNavigatedTo(e);
         }
     }
