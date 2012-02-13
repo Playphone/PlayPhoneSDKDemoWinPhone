@@ -11,7 +11,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
-    mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
+    mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="480"
     shell:SystemTray.IsVisible="False">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
@@ -32,12 +32,18 @@
             <ScrollViewer>
                 <StackPanel Orientation="Vertical" Width="Auto" VerticalAlignment="Top">
                     <StackPanel Orientation="Horizontal" Width="Auto" VerticalAlignment="Center">
-                        <toolkit:ToggleSwitch Header="Game id" 
+                        <TextBlock Text="Game id:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <CheckBox Checked="ToggleSwitch_Checked" 
+                                  Unchecked="ToggleSwitch_Unchecked" 
+                                  IsChecked="False" 
+                                  HorizontalAlignment="Left" 
+                                  VerticalAlignment="Center"/>
+                        <!--                        <toolkit:ToggleSwitch Header="Game id" 
                                           Checked="ToggleSwitch_Checked"
                                           Unchecked="ToggleSwitch_Unchecked"
                                           IsChecked="False" 
                                           HorizontalAlignment="Left"
-                                          VerticalAlignment="Bottom"/>
+                                          VerticalAlignment="Bottom"/>-->
                         <TextBox x:Name="game_id" Width="240" IsEnabled="False" FontSize="30" VerticalAlignment="Center"/>
                     </StackPanel>
 

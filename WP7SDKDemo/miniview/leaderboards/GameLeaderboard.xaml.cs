@@ -49,17 +49,29 @@ namespace WP7SDKDemo.miniview.leaderboards
             if( !Int64.TryParse(player_id.Text, out playerId) )
             {
                 playerId = MNDirect.GetSession().GetMyUserId();
+                if(player_id.IsEnabled)
+                {
+                    MessageBox.Show("Wrong player id. Current used");
+                }
             }
             int gameId = -1;
             if( !Int32.TryParse(game_id.Text, out gameId) )
             {
                 gameId = MNDirect.GetSession().GetGameId();
+                if(game_id.IsEnabled)
+                {
+                    MessageBox.Show("Wrong game id. Current used");
+                }
             }
 
             int gameSetId = -1;
             if( !Int32.TryParse(gameset_id.Text, out gameSetId) )
             {
                 gameSetId = MNDirect.GetSession().GetDefaultGameSetId();
+                if(gameset_id.IsEnabled)
+                {
+                    MessageBox.Show("Wrong gameset id. Default used");
+                }
             }
 
             ListPickerItem periodItem = periodList.ItemContainerGenerator.ContainerFromIndex(periodList.SelectedIndex) as ListPickerItem;
