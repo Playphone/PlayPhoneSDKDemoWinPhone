@@ -62,7 +62,8 @@ namespace WP7SDKDemo.views
         {
             try
             {
-                MNDirect.GetGameRoomCookiesProvider().GetCurrentGameRoomCookie(Int32.Parse(download_key.Text));
+                string cookie = MNDirect.GetGameRoomCookiesProvider().GetCurrentGameRoomCookie(Int32.Parse(download_key.Text));
+                MessageBox.Show("Cookie downloaded successfully! Key= " + download_key.Text + " Value= " + cookie);
             }
             catch (FormatException ex)
             {
