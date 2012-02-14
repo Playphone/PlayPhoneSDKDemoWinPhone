@@ -10,7 +10,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
-    mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
+    mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="480"
     shell:SystemTray.IsVisible="False">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
@@ -27,25 +27,27 @@
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">           
-<!--            <TextBlock Text="Put data key(integer) here"/>
-            <TextBox x:Name="upload_key" Width="Auto" Height="80"/>
-            <TextBlock Text="Type some text to save cloud storage"/>
-            <TextBox x:Name="upload_data" Width="Auto" Height="80"/>
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Put data key(integer) here"/>
+                <TextBox x:Name="upload_key" Width="Auto" Height="80"/>
+                <TextBlock Text="Type some text to save cloud storage"/>
+                <TextBox x:Name="upload_data" Width="Auto" Height="80"/>
 
-            <Button Click="upload" Width="Auto" Height="80">
-                <Button.Content>
-                    <TextBlock Text="Upload data"/>
-                </Button.Content>
-            </Button>
-            <TextBlock Text="Put data key(integer) to download from cloud"/>
-            <TextBox x:Name="download_key" Width="Auto" Height="80"/>
+                <Button Click="upload" Width="Auto" Height="80">
+                    <Button.Content>
+                        <TextBlock Text="Upload data"/>
+                    </Button.Content>
+                </Button>
+                <TextBlock Text="Put data key(integer) to download from cloud"/>
+                <TextBox x:Name="download_key" Width="Auto" Height="80"/>
 
-            <Button Click="upload" Width="Auto" Height="80">
-                <Button.Content>
-                    <TextBlock Text="Download data"/>
-                </Button.Content>
-            </Button>-->
+                <Button Click="download" Width="Auto" Height="80">
+                    <Button.Content>
+                        <TextBlock Text="Download data"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
         </Grid>
     </Grid>
  
