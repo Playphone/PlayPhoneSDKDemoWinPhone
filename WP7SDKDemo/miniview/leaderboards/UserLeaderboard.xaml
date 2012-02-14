@@ -31,26 +31,28 @@
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <ScrollViewer>
                 <StackPanel Orientation="Vertical" Width="Auto" VerticalAlignment="Top">
-                    <StackPanel Orientation="Horizontal" Width="Auto" VerticalAlignment="Center">
-                        <TextBlock Text="Game id:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <CheckBox Checked="ToggleSwitch_Checked" 
-                                  Unchecked="ToggleSwitch_Unchecked" 
-                                  IsChecked="False" 
-                                  HorizontalAlignment="Left" 
-                                  VerticalAlignment="Center"/>
-                        <!--                        <toolkit:ToggleSwitch Header="Game id" 
-                                          Checked="ToggleSwitch_Checked"
-                                          Unchecked="ToggleSwitch_Unchecked"
-                                          IsChecked="False" 
-                                          HorizontalAlignment="Left"
-                                          VerticalAlignment="Bottom"/>-->
-                        <TextBox x:Name="game_id" Width="240" IsEnabled="False" FontSize="30" VerticalAlignment="Center"/>
-                    </StackPanel>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal" Width="Auto" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0">
+                            <TextBlock Text="Game id:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <CheckBox Checked="ToggleSwitch_Checked" 
+                                      Unchecked="ToggleSwitch_Unchecked" 
+                                      IsChecked="False" 
+                                      HorizontalAlignment="Left" 
+                                      VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBox x:Name="game_id" Width="Auto" IsEnabled="False" FontSize="30" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
 
-                    <StackPanel Orientation="Horizontal" Width="480" VerticalAlignment="Center">
-                        <TextBlock Text="Gameset id: " VerticalAlignment="Center"/>
-                        <TextBox x:Name="gameset_id" Width="240" FontSize="30" VerticalAlignment="Center"/>
-                    </StackPanel>
+                        <TextBlock Text="Gameset id: " VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
+                        <TextBox x:Name="gameset_id" Width="Auto" FontSize="30" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"/>
+                    </Grid>
 
                     <toolkit:ListPicker x:Name="scopeList">
                         <toolkit:ListPicker.ItemTemplate>
