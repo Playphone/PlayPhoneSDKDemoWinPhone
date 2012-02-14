@@ -30,7 +30,10 @@ namespace WP7SDKDemo.miniview.veconomy
         public UserItems()
         {
             InitializeComponent();
+        }
 
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
             MNDirect.GetVItemsProvider().VItemsTransactionCompleted += UserItems_VItemsTransactionCompleted;
             MNDirect.GetVItemsProvider().VItemsTransactionFailed += UserItems_VItemsTransactionFailed;
 
@@ -43,6 +46,16 @@ namespace WP7SDKDemo.miniview.veconomy
             {
                 UserItemsVItemsListUpdated();
             }
+
+            base.OnNavigatedTo(e);
+        }
+
+        protected override void OnNavigatingFrom(System.Windows.Navigation.NavigatingCancelEventArgs e)
+        {
+            MNDirect.GetVItemsProvider().VItemsTransactionCompleted -= UserItems_VItemsTransactionCompleted;
+            MNDirect.GetVItemsProvider().VItemsTransactionFailed -= UserItems_VItemsTransactionFailed;
+            MNDirect.GetVItemsProvider().VItemsListUpdated -= UserItemsVItemsListUpdated;
+            base.OnNavigatingFrom(e);
         }
 
         void UserItems_VItemsTransactionFailed(MNVItemsProvider.TransactionError error)

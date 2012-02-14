@@ -25,11 +25,16 @@ namespace WP7SDKDemo.miniview.leaderboards
         public SimpleLeaderboard()
         {
             InitializeComponent();
-            complexityList.ItemsSource = Complexity.getFilledList();
-            scopeList.ItemsSource = Scope.getFilledList();
-            periodList.ItemsSource = Period.getFilledList();
         }
 
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            complexityList.ItemsSource = Complexity.getFilledList();
+            scopeList.ItemsSource = Scope.getFilledList();
+            periodList.ItemsSource = Period.getFilledList(); 
+            base.OnNavigatedTo(e);
+        }
+        
         private void loadLeaderboard(object sender, RoutedEventArgs e)
         {
             ListPickerItem complexityItem = complexityList.ItemContainerGenerator.ContainerFromIndex(complexityList.SelectedIndex) as ListPickerItem;

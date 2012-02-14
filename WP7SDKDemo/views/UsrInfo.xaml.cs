@@ -21,11 +21,22 @@ namespace WP7SDKDemo.views
         public UsrInfo()
         {
             InitializeComponent();
-            MNDirect.GetSession().SessionStatusChanged += new MNSession.SessionStatusChangedEventHandler(this.onStatusChanged);
+        }
+
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            MNDirect.GetSession().SessionStatusChanged += onStatusChanged;
             if (MNDirect.GetSession().IsUserLoggedIn())
             {
                 onStatusChanged(0, 0);
-            }
+            } 
+            base.OnNavigatedTo(e);
+        }
+
+        protected override void OnNavigatingFrom(System.Windows.Navigation.NavigatingCancelEventArgs e)
+        {
+            MNDirect.GetSession().SessionStatusChanged -= onStatusChanged;
+            base.OnNavigatingFrom(e);
         }
 
         private void onStatusChanged(int newStatus, int oldStatus)

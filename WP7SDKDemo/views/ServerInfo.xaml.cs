@@ -21,10 +21,23 @@ namespace WP7SDKDemo.views
         public ServerInfo()
         {
             InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
             MNDirect.GetServerInfoProvider().ServerInfoItemReceived += serverInfoItemReceivedEventHandler;
             MNDirect.GetServerInfoProvider().ServerInfoItemRequestFailed += serverInfoItemRequestFailedEventHandler;
-            MNDirect.GetSession().SessionStatusChanged += new MNSession.SessionStatusChangedEventHandler(this.onStatusChanged);
+            MNDirect.GetSession().SessionStatusChanged += onStatusChanged;
             onStatusChanged(0, 0);
+            base.OnNavigatedTo(e);
+        }
+
+        protected override void OnNavigatingFrom(System.Windows.Navigation.NavigatingCancelEventArgs e)
+        {
+            MNDirect.GetServerInfoProvider().ServerInfoItemReceived -= serverInfoItemReceivedEventHandler;
+            MNDirect.GetServerInfoProvider().ServerInfoItemRequestFailed -= serverInfoItemRequestFailedEventHandler;
+            MNDirect.GetSession().SessionStatusChanged -= onStatusChanged;
+            base.OnNavigatingFrom(e);
         }
 
         private void serverInfoItemReceivedEventHandler(int key, string value)

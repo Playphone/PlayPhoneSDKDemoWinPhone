@@ -26,9 +26,21 @@ namespace WP7SDKDemo.views
         public Multinet()
         {
             InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
             MNDirect.GetSession().SessionStatusChanged += onSessionStatusChangedHandler;
             MNDirect.DoFinishGame += onDoFinishGameHandler;
-            MNDirect.DoCancelGame += onDoCancelGameHandler;
+            MNDirect.DoCancelGame += onDoCancelGameHandler; base.OnNavigatedTo(e);
+        }
+
+        protected override void OnNavigatingFrom(System.Windows.Navigation.NavigatingCancelEventArgs e)
+        {
+            MNDirect.GetSession().SessionStatusChanged -= onSessionStatusChangedHandler;
+            MNDirect.DoFinishGame -= onDoFinishGameHandler;
+            MNDirect.DoCancelGame -= onDoCancelGameHandler;
+            base.OnNavigatingFrom(e);
         }
 
         private void onDecrease(object sender, RoutedEventArgs e)

@@ -20,7 +20,12 @@ namespace WP7SDKDemo.miniview.leaderboards
         public GameLeaderboard()
         {
             InitializeComponent();
-            periodList.ItemsSource = Period.getFilledList();
+        }
+
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            periodList.ItemsSource = Period.getFilledList(); 
+            base.OnNavigatedTo(e);
         }
 
         private void ToggleSwitch_Checked(object sender, RoutedEventArgs e)

@@ -20,8 +20,13 @@ namespace WP7SDKDemo.miniview.leaderboards
         public UserLeaderboard()
         {
             InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
             scopeList.ItemsSource = Scope.getFilledList();
-            periodList.ItemsSource = Period.getFilledList();
+            periodList.ItemsSource = Period.getFilledList(); 
+            base.OnNavigatedTo(e);
         }
 
         private void load(object sender, RoutedEventArgs e)

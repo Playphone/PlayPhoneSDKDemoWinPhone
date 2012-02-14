@@ -32,8 +32,19 @@ namespace WP7SDKDemo.views
         public Login()
         {
             InitializeComponent();
-            MNDirect.GetSession().SessionStatusChanged += new MNSession.SessionStatusChangedEventHandler(this.onUserChanged);
-            isLoggedIn = MNDirect.GetSession().IsUserLoggedIn();
+        }
+
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            MNDirect.GetSession().SessionStatusChanged += this.onUserChanged;
+            isLoggedIn = MNDirect.GetSession().IsUserLoggedIn(); 
+            base.OnNavigatedTo(e);
+        }
+
+        protected override void OnNavigatingFrom(System.Windows.Navigation.NavigatingCancelEventArgs e)
+        {
+            MNDirect.GetSession().SessionStatusChanged -= this.onUserChanged;
+            base.OnNavigatingFrom(e);
         }
 
         private void Loginout_Click(object sender, RoutedEventArgs e)

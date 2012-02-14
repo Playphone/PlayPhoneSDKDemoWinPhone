@@ -32,12 +32,20 @@ namespace WP7SDKDemo.views
 
         private void onServerInfoItemReceivedEventHandler(int key, string value)
         {
+            removeListeners(); 
             MNDebug.debug("onServerInfoItemReceivedEventHandler");
         }
 
         private void onServerInfoItemRequestFailedEventHandler(int key, string error)
         {
+            removeListeners();
             MNDebug.debug("onServerInfoItemRequestFailedEventHandler");
+        }
+
+        private void removeListeners()
+        {
+            MNDirect.GetServerInfoProvider().ServerInfoItemReceived -= onServerInfoItemReceivedEventHandler;
+            MNDirect.GetServerInfoProvider().ServerInfoItemRequestFailed -= onServerInfoItemRequestFailedEventHandler;
         }
     }
 }

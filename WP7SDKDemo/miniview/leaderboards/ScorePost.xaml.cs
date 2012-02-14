@@ -21,7 +21,12 @@ namespace WP7SDKDemo.miniview.leaderboards
         public ScorePost()
         {
             InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
             complexityList.ItemsSource = Complexity.getFilledList();
+            base.OnNavigatedTo(e);
         }
 
         private void postScore(object sender, RoutedEventArgs e)

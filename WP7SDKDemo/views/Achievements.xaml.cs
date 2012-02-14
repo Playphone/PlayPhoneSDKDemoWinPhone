@@ -23,6 +23,11 @@ namespace WP7SDKDemo.views
         {
             InitializeComponent();
 
+
+        }
+
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
             MNDirect.GetAchievementsProvider().PlayerAchievementUnlocked += Achievements_PlayerAchievementUnlocked;
             MNDirect.GetSession().SessionStatusChanged += onStatusChanged;
 
@@ -40,6 +45,15 @@ namespace WP7SDKDemo.views
             {
                 onListUpdated();
             }
+            base.OnNavigatedTo(e);
+        }
+
+        protected override void OnNavigatingFrom(System.Windows.Navigation.NavigatingCancelEventArgs e)
+        {
+            MNDirect.GetAchievementsProvider().PlayerAchievementUnlocked -= Achievements_PlayerAchievementUnlocked;
+            MNDirect.GetSession().SessionStatusChanged -= onStatusChanged;
+            MNDirect.GetAchievementsProvider().GameAchievementListUpdated -= onListUpdated;
+            base.OnNavigatingFrom(e);
         }
 
         private void onStatusChanged(int newstatus, int oldstatus)

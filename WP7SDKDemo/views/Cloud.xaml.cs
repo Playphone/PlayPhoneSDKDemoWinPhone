@@ -19,10 +19,24 @@ namespace WP7SDKDemo.views
         public Cloud()
         {
             InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
             MNDirect.GetGameCookiesProvider().GameCookieUploadFailed += gameCookieUploadFailedEventHandler;
             MNDirect.GetGameCookiesProvider().GameCookieUploadSucceeded += gameCookieUploadSucceededEventHandler;
             MNDirect.GetGameCookiesProvider().GameCookieDownloadFailed += gameCookieDownloadFailedEventHandler;
-            MNDirect.GetGameCookiesProvider().GameCookieDownloadSucceeded += gameCookieDownloadSucceededEventHandler;
+            MNDirect.GetGameCookiesProvider().GameCookieDownloadSucceeded += gameCookieDownloadSucceededEventHandler; 
+            base.OnNavigatedTo(e);
+        }
+
+        protected override void OnNavigatingFrom(System.Windows.Navigation.NavigatingCancelEventArgs e)
+        {
+            MNDirect.GetGameCookiesProvider().GameCookieUploadFailed -= gameCookieUploadFailedEventHandler;
+            MNDirect.GetGameCookiesProvider().GameCookieUploadSucceeded -= gameCookieUploadSucceededEventHandler;
+            MNDirect.GetGameCookiesProvider().GameCookieDownloadFailed -= gameCookieDownloadFailedEventHandler;
+            MNDirect.GetGameCookiesProvider().GameCookieDownloadSucceeded -= gameCookieDownloadSucceededEventHandler; 
+            base.OnNavigatingFrom(e);
         }
 
         private void gameCookieDownloadSucceededEventHandler(int key, string cookie)
