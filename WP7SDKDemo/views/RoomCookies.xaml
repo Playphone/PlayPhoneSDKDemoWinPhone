@@ -6,6 +6,7 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -28,26 +29,41 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="Put data key(integer) here"/>
-                <TextBox x:Name="upload_key" Width="Auto" Height="80"/>
-                <TextBlock Text="Type some text to save cloud storage"/>
-                <TextBox x:Name="upload_data" Width="Auto" Height="80"/>
+            <ScrollViewer>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Put data key(integer) here"/>
+                    <TextBox x:Name="upload_key" Width="Auto" Height="80"/>
+                    <TextBlock Text="Type some text to save cloud storage"/>
+                    <TextBox x:Name="upload_data" Width="Auto" Height="80"/>
 
-                <Button Click="upload" Width="Auto" Height="80">
-                    <Button.Content>
-                        <TextBlock Text="Upload data"/>
-                    </Button.Content>
-                </Button>
-                <TextBlock Text="Put data key(integer) to download from cloud"/>
-                <TextBox x:Name="download_key" Width="Auto" Height="80"/>
+                    <Button Click="upload" Width="Auto" Height="80">
+                        <Button.Content>
+                            <TextBlock Text="Upload data"/>
+                        </Button.Content>
+                    </Button>
+                    <TextBlock Text="Put data key(integer) to download from cloud"/>
+                    <TextBox x:Name="download_key" Width="Auto" Height="80"/>
+                
+                    <toolkit:ListPicker Name="roomlist">
+                        <toolkit:ListPicker.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding RoomName}" Width="Auto"/>
+                            </DataTemplate>
+                        </toolkit:ListPicker.ItemTemplate>
+                        <toolkit:ListPicker.FullModeItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding RoomName}" Width="Auto"/>
+                            </DataTemplate>
+                        </toolkit:ListPicker.FullModeItemTemplate>
+                    </toolkit:ListPicker>
 
-                <Button Click="download" Width="Auto" Height="80">
-                    <Button.Content>
-                        <TextBlock Text="Download data"/>
-                    </Button.Content>
-                </Button>
-            </StackPanel>
+                    <Button Click="download" Width="Auto" Height="80">
+                        <Button.Content>
+                            <TextBlock Text="Download data"/>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
     </Grid>
  

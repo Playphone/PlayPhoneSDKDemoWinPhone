@@ -14,6 +14,8 @@ using Microsoft.Phone.Controls;
 namespace WP7SDKDemo.views
 {
     using PlayPhone.MultiNet;
+    using PlayPhone.MultiNet.Core.WS.Data;
+    using PlayPhone.MultiNet.Providers;
 
     public partial class RoomCookies : PhoneApplicationPage
     {
@@ -26,6 +28,7 @@ namespace WP7SDKDemo.views
         {
             MNDirect.GetGameRoomCookiesProvider().GameRoomCookieDownloadFailed += RoomCookies_GameRoomCookieDownloadFailed;
             MNDirect.GetGameRoomCookiesProvider().GameRoomCookieDownloadSucceeded += RoomCookies_GameRoomCookieDownloadSucceeded;
+            MNDirect.GetWSProvider().Send(new MNWSInfoRequestCurrGameRoomList(OnCompleted));
             base.OnNavigatedTo(e);
         }
 
@@ -34,6 +37,12 @@ namespace WP7SDKDemo.views
             MNDirect.GetGameRoomCookiesProvider().GameRoomCookieDownloadFailed -= RoomCookies_GameRoomCookieDownloadFailed;
             MNDirect.GetGameRoomCookiesProvider().GameRoomCookieDownloadSucceeded -= RoomCookies_GameRoomCookieDownloadSucceeded;
             base.OnNavigatingFrom(e);
+        }
+
+        private void OnCompleted(MNWSInfoRequestCurrGameRoomList.RequestResult result)
+        {
+            List<RoomListItem> items = result.GetDataEntry().Select(room => new RoomListItem(room)).ToList();
+            roomlist.ItemsSource = items;
         }
 
         void RoomCookies_GameRoomCookieDownloadSucceeded(int roomSFId, int key, string cookie)
@@ -62,13 +71,65 @@ namespace WP7SDKDemo.views
         {
             try
             {
-                string cookie = MNDirect.GetGameRoomCookiesProvider().GetCurrentGameRoomCookie(Int32.Parse(download_key.Text));
-                MessageBox.Show("Cookie downloaded successfully! Key= " + download_key.Text + " Value= " + cookie);
+                RoomListItem currentItem = roomlist.SelectedItem as RoomListItem;
+                if( currentItem != null )
+                {
+                    if( currentItem.IsCurrent )
+                    {
+                        string cookie = MNDirect.GetGameRoomCookiesProvider().GetCurrentGameRoomCookie(Int32.Parse(download_key.Text));
+                        MessageBox.Show("Cookie downloaded successfully! Key= " + download_key.Text + " Value= " + cookie);
+                    }
+                    else
+                    {
+                        MNDirect.GetGameRoomCookiesProvider().DownloadGameRoomCookie(currentItem.RoomSfid, Int32.Parse(download_key.Text));
+                    }
+                }
             }
             catch (FormatException ex)
             {
                 MessageBox.Show("There should be integer value between 1 and 99!");
             }
+        }
+    }
+
+    public class RoomListItem
+    {
+        private readonly int roomSfid;
+        private readonly string roomName;
+        private readonly bool isCurrent = false;
+
+        public RoomListItem(MNWSRoomListItem room)
+        {
+            var roomSfId = room.GetRoomSFId();
+            if (roomSfId != null)
+            {
+                roomSfid = roomSfId.Value;
+            }
+
+            if (MNDirect.GetSession().GetCurrentRoomId() == roomSfid)
+            {
+                roomName = "{" + roomSfid + "} " + room.GetRoomName() + " (Current)";
+                isCurrent = true;
+            }
+            else
+            {
+                roomName = "{" + roomSfid + "} " + room.GetRoomName();
+            }
+        }
+
+        public bool IsCurrent
+        {
+            get { return isCurrent; }
+        }
+
+        public string RoomName
+        {
+            get { return roomName; }
+        }
+
+        public int RoomSfid
+        {
+            get { return roomSfid; }
         }
     }
 }
