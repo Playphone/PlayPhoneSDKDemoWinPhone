@@ -23,29 +23,51 @@ namespace WP7SDKDemo.views
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-            MNDirect.GetServerInfoProvider().ServerInfoItemReceived += onServerInfoItemReceivedEventHandler;
-            MNDirect.GetServerInfoProvider().ServerInfoItemRequestFailed += onServerInfoItemRequestFailedEventHandler;
-            MNDirect.GetServerInfoProvider().RequestServerInfoItem(MNServerInfoProvider.SERVER_TIME_INFO_KEY);
+            if (MNDirect.GetGameSettingsProvider().IsGameSettingListNeedUpdate())
+            {
+                MNDirect.GetGameSettingsProvider().GameSettingsListUpdated += Settings_GameSettingsListUpdated;
+                MNDirect.GetGameSettingsProvider().DoGameSettingListUpdate();
+            }
+            else
+            {
+                Settings_GameSettingsListUpdated();
+            }
+            base.OnNavigatedTo(e);
         }
 
-        private void onServerInfoItemReceivedEventHandler(int key, string value)
+        protected override void OnNavigatingFrom(System.Windows.Navigation.NavigatingCancelEventArgs e)
         {
-            removeListeners(); 
-            MNDebug.debug("onServerInfoItemReceivedEventHandler");
+            MNDirect.GetGameSettingsProvider().GameSettingsListUpdated -= Settings_GameSettingsListUpdated;
+            base.OnNavigatingFrom(e);
         }
 
-        private void onServerInfoItemRequestFailedEventHandler(int key, string error)
+        void Settings_GameSettingsListUpdated()
         {
-            removeListeners();
-            MNDebug.debug("onServerInfoItemRequestFailedEventHandler");
+            MNDirect.GetGameSettingsProvider().GameSettingsListUpdated -= Settings_GameSettingsListUpdated;
+            List<MNGameSettingsProvider.GameSettingInfo> items = new List<MNGameSettingsProvider.GameSettingInfo>(MNDirect.GetGameSettingsProvider().GetGameSettingsList());
+            foreach (var gameSettingInfo in items.Where(gameSettingInfo => gameSettingInfo.Id == 0 && gameSettingInfo.Name.Length == 0))
+            {
+                gameSettingInfo.Name = "(Default)";
+            }
+            settings.ItemsSource = items;
         }
 
-        private void removeListeners()
+        private void goToSettings(object sender, RoutedEventArgs e)
         {
-            MNDirect.GetServerInfoProvider().ServerInfoItemReceived -= onServerInfoItemReceivedEventHandler;
-            MNDirect.GetServerInfoProvider().ServerInfoItemRequestFailed -= onServerInfoItemRequestFailedEventHandler;
+
+            MNGameSettingsProvider.GameSettingInfo item = ((Button)sender).DataContext as MNGameSettingsProvider.GameSettingInfo;
+            if (item != null)
+            {
+                item = MNDirect.GetGameSettingsProvider().FindGameSettingById(item.Id);
+                string param =
+                    String.Format(
+                        "?Id={0}&Name={1}&Params={2}&SysParams={3}&MultiplayerEnabled={4}&LeaderboardVisible={5}",
+                        item.Id, item.Name, item.Params, item.SysParams, item.MultiplayerEnabled, item.LeaderboardVisible);
+
+                NavigationService.Navigate(new Uri("/miniview/Setting.xaml" + param, UriKind.RelativeOrAbsolute));
+            }
         }
     }
 }

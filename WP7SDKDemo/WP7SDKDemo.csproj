@@ -89,6 +89,9 @@
     <Compile Include="miniview\leaderboards\UserLeaderboard.xaml.cs">
       <DependentUpon>UserLeaderboard.xaml</DependentUpon>
     </Compile>
+    <Compile Include="miniview\Setting.xaml.cs">
+      <DependentUpon>Setting.xaml</DependentUpon>
+    </Compile>
     <Compile Include="miniview\veconomy\ItemInfo.xaml.cs">
       <DependentUpon>ItemInfo.xaml</DependentUpon>
     </Compile>
@@ -169,6 +172,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="miniview\leaderboards\UserLeaderboard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="miniview\Setting.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

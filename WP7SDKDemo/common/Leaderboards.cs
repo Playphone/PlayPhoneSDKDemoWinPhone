@@ -15,6 +15,8 @@ using System.Windows.Media.Imaging;
 
 namespace WP7SDKDemo.common
 {
+    using PlayPhone.MultiNet;
+
     public class Complexity
     {
         public const int Default = 0;
@@ -23,6 +25,7 @@ namespace WP7SDKDemo.common
 
         public string Name { get; set; }
         public int Value { get; set; }
+        private static List<Complexity> provItems;
 
         public Complexity(int value, string name)
         {
@@ -39,6 +42,29 @@ namespace WP7SDKDemo.common
                                            new Complexity(Advanced, "Advanced")
                                        };
             return ret;
+        }
+
+        public static List<Complexity> getProviderList()
+        {
+            provItems = new List<Complexity>();
+            if (MNDirect.GetGameSettingsProvider().IsGameSettingListNeedUpdate())
+            {
+                MNDirect.GetGameSettingsProvider().GameSettingsListUpdated += Complexity_GameSettingsListUpdated;
+                MNDirect.GetGameSettingsProvider().DoGameSettingListUpdate();
+            }
+            else
+            {
+                Complexity_GameSettingsListUpdated();
+            }
+            return provItems;
+        }
+
+        static void Complexity_GameSettingsListUpdated()
+        {
+            foreach (var complexity in MNDirect.GetGameSettingsProvider().GetGameSettingsList())
+            {
+                provItems.Add(new Complexity(complexity.Id, complexity.Id == 0 ?"(Default)":complexity.Name));
+            }
         }
     }
 

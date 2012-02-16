@@ -29,7 +29,7 @@ namespace WP7SDKDemo.miniview.leaderboards
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-            complexityList.ItemsSource = Complexity.getFilledList();
+            complexityList.ItemsSource = Complexity.getProviderList();
             scopeList.ItemsSource = Scope.getFilledList();
             periodList.ItemsSource = Period.getFilledList(); 
             base.OnNavigatedTo(e);
