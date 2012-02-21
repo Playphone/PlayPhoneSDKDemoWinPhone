@@ -10,7 +10,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
-    mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
+    mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="480"
     shell:SystemTray.IsVisible="False">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
@@ -28,11 +28,14 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <Button Name="Loginout" Click="Loginout_Click" Width="Auto" Height="80" VerticalAlignment="Top">
-                <Button.Content>
-                    <TextBlock Name="caption" Text="Login"/>
-                </Button.Content>
-            </Button>
+            <StackPanel Orientation="Vertical">
+                <TextBlock x:Name="status_txt" Text="User in not logged in"/>
+                <Button x:Name="Loginout" Click="Loginout_Click" Width="Auto" Height="80" VerticalAlignment="Top">
+                    <Button.Content>
+                        <TextBlock x:Name="caption" Text="Login"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
         </Grid>
     </Grid>
  

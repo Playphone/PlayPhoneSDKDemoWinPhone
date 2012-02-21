@@ -15,6 +15,8 @@ using PlayPhone.MultiNet.Core;
 
 namespace WP7SDKDemo.views
 {
+    using System.Windows.Media.Imaging;
+
     public partial class Login : PhoneApplicationPage
     {
         private bool _isLoggedIn = false;
@@ -63,6 +65,15 @@ namespace WP7SDKDemo.views
         private void onUserChanged(int newStatus, int oldStatus)
         {
             isLoggedIn = newStatus >= MNConst.MN_LOGGEDIN;
+            if( isLoggedIn )
+            {
+                MNUserInfo info = MNDirect.GetSession().GetMyUserInfo();
+                status_txt.Text = info.UserName + " is logged in";
+            }
+            else
+            {
+                status_txt.Text = "User in not logged in";
+            }
         }
     }
 }
