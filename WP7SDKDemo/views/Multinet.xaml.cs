@@ -132,7 +132,7 @@ namespace WP7SDKDemo.views
         {
             MNDebug.debug("Multinet.onDoFinishGameHandler");
             StopCounter();
-            //             post_score.visible = true;
+            post_score.Visibility = Visibility.Visible;
             totalScore = 0;
         }
 
@@ -158,6 +158,17 @@ namespace WP7SDKDemo.views
         private void joinRandomroom(object sender, RoutedEventArgs e)
         {
             MNDirect.GetSession().ReqJoinRandomRoom(MNDirect.GetSession().GetDefaultGameSetId().ToString());
+        }
+
+        private void OnPostScoreClick(object sender, RoutedEventArgs e)
+        {
+            post_score.Visibility = Visibility.Collapsed;
+            MNDirect.PostGameScore(totalScore);
+        }
+
+        private void sendMessage(object sender, RoutedEventArgs e)
+        {
+            MNDirect.SendGameMessage( message.Text );
         }
     }
 }

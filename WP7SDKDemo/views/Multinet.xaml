@@ -10,7 +10,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
-    mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
+    mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="480"
     shell:SystemTray.IsVisible="False">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
@@ -36,7 +36,7 @@
                 </Button>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock Text="Time left:"></TextBlock>
-                    <TextBlock Name="timer_display" Text="0"></TextBlock>
+                    <TextBlock x:Name="timer_display" Text="0"></TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button Click="onDecrease">
@@ -50,7 +50,18 @@
                         </Button.Content>
                     </Button>
                 </StackPanel>
-                <TextBlock Name="tip" TextWrapping="Wrap"/>
+                <TextBlock x:Name="tip" TextWrapping="Wrap"/>
+                <Button x:Name="post_score" Click="OnPostScoreClick" Visibility="Collapsed">
+                    <Button.Content>
+                        <TextBlock Text="Post score"></TextBlock>
+                    </Button.Content>
+                </Button>
+                <TextBox x:Name="message" Margin="0,40,0,0"/>
+                <Button Click="sendMessage">
+                    <Button.Content>
+                        <TextBlock Text="Send game message"></TextBlock>
+                    </Button.Content>
+                </Button>
             </StackPanel>
         </Grid>
     </Grid>
