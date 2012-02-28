@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010 Express for Windows Phone
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WP7SDKDemo", "WP7SDKDemo\WP7SDKDemo.csproj", "{5A379C0F-2BD2-447F-A8AB-402278E6E5D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayPhoneMultiNet", "..\PlayPhoneSDKWP7\SDK\PlayPhoneMultiNet\PlayPhoneMultiNet.csproj", "{9D730A86-297E-438E-B629-AF14F6BAF03C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayPhoneMultiNet", "WP7SDKDemo\PlayPhoneMultiNet\PlayPhoneMultiNet.csproj", "{9D730A86-297E-438E-B629-AF14F6BAF03C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

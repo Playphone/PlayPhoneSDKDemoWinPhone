@@ -1,0 +1,319 @@
+diff -urN DotNetZip.orig/CommonSrc/CRC32.cs DotNetZip/CommonSrc/CRC32.cs
+--- DotNetZip.orig/CommonSrc/CRC32.cs	Tue Aug  2 22:25:55 2011
++++ DotNetZip/CommonSrc/CRC32.cs	Wed Feb  1 09:57:02 2012
+@@ -44,7 +44,7 @@
+ 
+     [Interop.GuidAttribute("ebc25cf6-9120-4283-b972-0e5520d0000C")]
+     [Interop.ComVisible(true)]
+-#if !NETCF
++#if !NETCF && !WINDOWS_PHONE
+     [Interop.ClassInterface(Interop.ClassInterfaceType.AutoDispatch)]
+ #endif
+     public class CRC32
+diff -urN DotNetZip.orig/Zip/Exceptions.cs DotNetZip/Zip/Exceptions.cs
+--- DotNetZip.orig/Zip/Exceptions.cs	Fri Aug  5 15:37:37 2011
++++ DotNetZip/Zip/Exceptions.cs	Wed Feb  1 09:57:02 2012
+@@ -27,7 +27,7 @@
+ using System;
+ using System.Collections.Generic;
+ using System.Text;
+-#if !NETCF
++#if !NETCF && !WINDOWS_PHONE
+ using System.Runtime.Serialization;
+ #endif
+ 
+diff -urN DotNetZip.orig/Zip/Shared.cs DotNetZip/Zip/Shared.cs
+--- DotNetZip.orig/Zip/Shared.cs	Tue Aug  2 23:41:02 2011
++++ DotNetZip/Zip/Shared.cs	Wed Feb  1 10:02:51 2012
+@@ -45,7 +45,7 @@
+ 
+             long fileLength = 0L;
+             FileShare fs = FileShare.ReadWrite;
+-#if !NETCF
++#if !NETCF && !WINDOWS_PHONE
+             // FileShare.Delete is not defined for the Compact Framework
+             fs |= FileShare.Delete;
+ #endif
+@@ -159,7 +159,11 @@
+         }
+ 
+ 
++#if !WINDOWS_PHONE
+         static System.Text.Encoding ibm437 = System.Text.Encoding.GetEncoding("IBM437");
++#else // Windows phone does not have default support for ibm437 encoding
++        static System.Text.Encoding ibm437 = System.Text.Encoding.GetEncoding("UTF-8");
++#endif
+         static System.Text.Encoding utf8 = System.Text.Encoding.GetEncoding("UTF-8");
+ 
+         internal static byte[] StringToByteArray(string value, System.Text.Encoding encoding)
+@@ -640,7 +644,7 @@
+         }
+ 
+ 
+-#if !NETCF
++#if !NETCF && !WINDOWS_PHONE
+         // workitem 8009
+         //
+         // This method must remain separate.
+diff -urN DotNetZip.orig/Zip/ZipEntry.Write.cs DotNetZip/Zip/ZipEntry.Write.cs
+--- DotNetZip.orig/Zip/ZipEntry.Write.cs	Fri Aug  5 17:38:00 2011
++++ DotNetZip/Zip/ZipEntry.Write.cs	Wed Feb  1 09:55:32 2012
+@@ -1478,7 +1478,7 @@
+             {
+                 // workitem 7145
+                 FileShare fs = FileShare.ReadWrite;
+-#if !NETCF
++#if !NETCF && !WINDOWS_PHONE
+                 // FileShare.Delete is not defined for the Compact Framework
+                 fs |= FileShare.Delete;
+ #endif
+@@ -1508,13 +1508,13 @@
+ #if BZIP
+             else if ((compressor as Ionic.BZip2.BZip2OutputStream) != null)
+                 compressor.Close();
+-#if !NETCF
++#if !NETCF && !WINDOWS_PHONE
+             else if ((compressor as Ionic.BZip2.ParallelBZip2OutputStream) != null)
+                 compressor.Close();
+ #endif
+ #endif
+ 
+-#if !NETCF
++#if !NETCF && !WINDOWS_PHONE
+             else if ((compressor as Ionic.Zlib.ParallelDeflateOutputStream) != null)
+                 compressor.Close();
+ #endif
+@@ -1937,7 +1937,7 @@
+         {
+             if (_CompressionMethod == 0x08 && CompressionLevel != Ionic.Zlib.CompressionLevel.None)
+             {
+-#if !NETCF
++#if !NETCF && !WINDOWS_PHONE
+                 // ParallelDeflateThreshold == 0    means ALWAYS use parallel deflate
+                 // ParallelDeflateThreshold == -1L  means NEVER use parallel deflate
+                 // Other values specify the actual threshold.
+@@ -1997,7 +1997,7 @@
+ #if BZIP
+             if (_CompressionMethod == 0x0c)
+             {
+-#if !NETCF
++#if !NETCF && !WINDOWS_PHONE
+                 if (_container.ParallelDeflateThreshold == 0L ||
+                     (streamLength > _container.ParallelDeflateThreshold &&
+                      _container.ParallelDeflateThreshold > 0L))
+diff -urN DotNetZip.orig/Zip/ZipEntry.cs DotNetZip/Zip/ZipEntry.cs
+--- DotNetZip.orig/Zip/ZipEntry.cs	Sat Aug  6 21:25:54 2011
++++ DotNetZip/Zip/ZipEntry.cs	Wed Feb  1 10:35:23 2012
+@@ -39,7 +39,7 @@
+ 
+     [Interop.GuidAttribute("ebc25cf6-9120-4283-b972-0e5520d00004")]
+     [Interop.ComVisible(true)]
+-#if !NETCF
++#if !NETCF && !WINDOWS_PHONE
+     [Interop.ClassInterface(Interop.ClassInterfaceType.AutoDispatch)]  // AutoDual
+ #endif
+     public partial class ZipEntry
+@@ -57,7 +57,11 @@
+             _CompressionLevel = Ionic.Zlib.CompressionLevel.Default;
+             _Encryption = EncryptionAlgorithm.None;
+             _Source = ZipEntrySource.None;
++#if !WINDOWS_PHONE
+             AlternateEncoding = System.Text.Encoding.GetEncoding("IBM437");
++#else
++            AlternateEncoding = System.Text.Encoding.GetEncoding("UTF-8");
++#endif
+             AlternateEncodingUsage = ZipOption.Never;
+         }
+ 
+@@ -2717,7 +2721,11 @@
+         private bool _skippedDuringSave;
+         private UInt32 _diskNumber;
+ 
++#if !WINDOWS_PHONE
+         private static System.Text.Encoding ibm437 = System.Text.Encoding.GetEncoding("IBM437");
++#else
++        private static System.Text.Encoding ibm437 = System.Text.Encoding.GetEncoding("UTF-8");
++#endif
+         //private System.Text.Encoding _provisionalAlternateEncoding = System.Text.Encoding.GetEncoding("IBM437");
+         private System.Text.Encoding _actualEncoding;
+ 
+diff -urN DotNetZip.orig/Zip/ZipFile.cs DotNetZip/Zip/ZipFile.cs
+--- DotNetZip.orig/Zip/ZipFile.cs	Fri Aug  5 20:50:31 2011
++++ DotNetZip/Zip/ZipFile.cs	Wed Feb  1 10:31:55 2012
+@@ -43,6 +43,9 @@
+ using System.Collections.Generic;
+ using Interop = System.Runtime.InteropServices;
+ 
++#if WINDOWS_PHONE
++using System.IO.IsolatedStorage;
++#endif
+ 
+ namespace Ionic.Zip
+ {
+@@ -124,7 +127,7 @@
+     /// </remarks>
+     [Interop.GuidAttribute("ebc25cf6-9120-4283-b972-0e5520d00005")]
+     [Interop.ComVisible(true)]
+-#if !NETCF
++#if !NETCF && !WINDOWS_PHONE
+     [Interop.ClassInterface(Interop.ClassInterfaceType.AutoDispatch)]
+ #endif
+     public partial class ZipFile :
+@@ -2132,7 +2135,7 @@
+         }
+ 
+ 
+-#if !NETCF
++#if !NETCF && !WINDOWS_PHONE
+         /// <summary>
+         ///   The size threshold for an entry, above which a parallel deflate is used.
+         /// </summary>
+@@ -2841,13 +2844,17 @@
+             _contentsChanged = true;
+             AddDirectoryWillTraverseReparsePoints = true;  // workitem 8617
+             CompressionLevel = Ionic.Zlib.CompressionLevel.Default;
+-#if !NETCF
++#if !NETCF && !WINDOWS_PHONE
+             ParallelDeflateThreshold = 512 * 1024;
+ #endif
+             // workitem 7685, 9868
+             _initEntriesDictionary();
+ 
++#if WINDOWS_PHONE
++            if (IsolatedStorageFile.GetUserStoreForApplication().FileExists(_name))
++#else
+             if (File.Exists(_name))
++#endif
+             {
+                 if (FullScan)
+                     ReadIntoInstance_Orig(this);
+@@ -3519,7 +3526,7 @@
+                         if (_writestream != null)
+                         {
+                             // workitem 7704
+-#if NETCF
++#if !NETCF && !WINDOWS_PHONE
+                             _writestream.Close();
+ #else
+                             _writestream.Dispose();
+@@ -3527,7 +3534,7 @@
+                             _writestream = null;
+                         }
+ 
+-#if !NETCF
++#if !NETCF && !WINDOWS_PHONE
+                     // workitem 10030
+                     if (this.ParallelDeflater != null)
+                     {
+@@ -3633,13 +3640,21 @@
+         private Int64 _OffsetOfCentralDirectory64;
+         private Nullable<bool> _OutputUsesZip64;
+         internal bool _inExtractAll;
++#if WINDOWS_PHONE
++        private System.Text.Encoding _alternateEncoding = System.Text.Encoding.UTF8;
++#else
+         private System.Text.Encoding _alternateEncoding = System.Text.Encoding.GetEncoding("IBM437"); // UTF-8
++#endif
+         private ZipOption _alternateEncodingUsage = ZipOption.Never;
++#if WINDOWS_PHONE
++        private static System.Text.Encoding _defaultEncoding = System.Text.Encoding.UTF8;
++#else
+         private static System.Text.Encoding _defaultEncoding = System.Text.Encoding.GetEncoding("IBM437");
++#endif
+ 
+         private int _BufferSize = BufferSizeDefault;
+ 
+-#if !NETCF
++#if !NETCF && !WINDOWS_PHONE
+         internal Ionic.Zlib.ParallelDeflateOutputStream ParallelDeflater;
+         private long _ParallelDeflateThreshold;
+         private int _maxBufferPairs = 16;
+diff -urN DotNetZip.orig/Zip/ZipInputStream.cs DotNetZip/Zip/ZipInputStream.cs
+--- DotNetZip.orig/Zip/ZipInputStream.cs	Sun Jul 31 18:48:31 2011
++++ DotNetZip/Zip/ZipInputStream.cs	Wed Feb  1 10:37:13 2012
+@@ -344,7 +344,11 @@
+             if (!_inputStream.CanRead)
+                 throw new ZipException("The stream must be readable.");
+             _container= new ZipContainer(this);
++#if WINDOWS_PHONE
++            _provisionalAlternateEncoding = System.Text.Encoding.GetEncoding("UTF-8");
++#else
+             _provisionalAlternateEncoding = System.Text.Encoding.GetEncoding("IBM437");
++#endif
+             _leaveUnderlyingStreamOpen = leaveOpen;
+             _findRequired= true;
+             _name = name ?? "(stream)";
+diff -urN DotNetZip.orig/Zip/ZipOutputStream.cs DotNetZip/Zip/ZipOutputStream.cs
+--- DotNetZip.orig/Zip/ZipOutputStream.cs	Thu Jul 28 10:34:31 2011
++++ DotNetZip/Zip/ZipOutputStream.cs	Wed Feb  1 10:37:24 2012
+@@ -353,7 +353,7 @@
+             _leaveUnderlyingStreamOpen = leaveOpen;
+             Strategy = Ionic.Zlib.CompressionStrategy.Default;
+             _name = name ?? "(stream)";
+-#if !NETCF
++#if !NETCF && !WINDOWS_PHONE
+             ParallelDeflateThreshold = -1L;
+ #endif
+         }
+@@ -1021,12 +1021,15 @@
+         {
+             get
+             {
++#if WINDOWS_PHONE
++                return System.Text.Encoding.GetEncoding("UTF-8");
++#else
+                 return System.Text.Encoding.GetEncoding("IBM437");
++#endif
+             }
+         }
+ 
+-
+-#if !NETCF
++#if !NETCF && !WINDOWS_PHONE
+         /// <summary>
+         ///   The size threshold for an entry, above which a parallel deflate is used.
+         /// </summary>
+@@ -1614,8 +1617,13 @@
+         private Dictionary<String, ZipEntry> _entriesWritten;
+         private int _entryCount;
+         private ZipOption _alternateEncodingUsage = ZipOption.Never;
++#if WINDOWS_PHONE
++        private System.Text.Encoding _alternateEncoding
++            = System.Text.Encoding.GetEncoding("UTF-8"); // default = IBM437
++#else
+         private System.Text.Encoding _alternateEncoding
+             = System.Text.Encoding.GetEncoding("IBM437"); // default = IBM437
++#endif
+ 
+         private bool _leaveUnderlyingStreamOpen;
+         private bool _disposed;
+@@ -1628,7 +1636,7 @@
+         private bool _needToWriteEntryHeader;
+         private string _name;
+         private bool _DontIgnoreCase;
+-#if !NETCF
++#if !NETCF && !WINDOWS_PHONE
+         internal Ionic.Zlib.ParallelDeflateOutputStream ParallelDeflater;
+         private long _ParallelDeflateThreshold;
+         private int _maxBufferPairs = 16;
+@@ -1714,7 +1722,7 @@
+             }
+         }
+ 
+-#if !NETCF
++#if !NETCF && !WINDOWS_PHONE
+         public Ionic.Zlib.ParallelDeflateOutputStream ParallelDeflater
+         {
+             get
+diff -urN DotNetZip.orig/Zlib/ZlibCodec.cs DotNetZip/Zlib/ZlibCodec.cs
+--- DotNetZip.orig/Zlib/ZlibCodec.cs	Fri Aug  5 15:34:49 2011
++++ DotNetZip/Zlib/ZlibCodec.cs	Wed Feb  1 09:56:57 2012
+@@ -81,7 +81,7 @@
+     /// </remarks>
+     [Interop.GuidAttribute("ebc25cf6-9120-4283-b972-0e5520d0000D")]
+     [Interop.ComVisible(true)]
+-#if !NETCF    
++#if !NETCF && !WINDOWS_PHONE
+     [Interop.ClassInterface(Interop.ClassInterfaceType.AutoDispatch)]
+ #endif
+     sealed public class ZlibCodec

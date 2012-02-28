@@ -256,7 +256,7 @@
     <Content Include="res\SplashScreenImage.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PlayPhoneSDKWP7\SDK\PlayPhoneMultiNet\PlayPhoneMultiNet.csproj">
+    <ProjectReference Include="PlayPhoneMultiNet\PlayPhoneMultiNet.csproj">
       <Project>{9D730A86-297E-438E-B629-AF14F6BAF03C}</Project>
       <Name>PlayPhoneMultiNet</Name>
     </ProjectReference>

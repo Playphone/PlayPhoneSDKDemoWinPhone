@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9D730A86-297E-438E-B629-AF14F6BAF03C}</ProjectGuid>
+    <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PlayPhoneMultiNet</RootNamespace>
+    <AssemblyName>PlayPhoneMultiNet</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Facebook">
+      <HintPath>External\Facebook\Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Phone" />
+    <Reference Include="SmartFoxClientAPI_Silverlight, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\PlayPhoneSDKDemoWP7\WP7SDKDemo\PlayPhoneMultiNet\External\SmartFoxClientAPI_Silverlight.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Net" />
+    <Reference Include="mscorlib.extensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\Facebook\MNFacebookDialog.cs" />
+    <Compile Include="Core\Facebook\MNFacebookGenericDialog.cs" />
+    <Compile Include="Core\Facebook\MNFacebookLoginDialog.cs" />
+    <Compile Include="Core\Facebook\MNFacebookPermissionsDialog.cs" />
+    <Compile Include="Core\Facebook\MNFacebookPublishDialog.cs" />
+    <Compile Include="Core\MNAppHostCallEventArgs.cs" />
+    <Compile Include="Core\MNAppHostCallInfo.cs" />
+    <Compile Include="Core\MNBuddyRoomParams.cs" />
+    <Compile Include="Core\MNChatMessage.cs" />
+    <Compile Include="Core\MNConfigData.cs" />
+    <Compile Include="Core\MNCurrGameResults.cs" />
+    <Compile Include="Core\MNDashboardPanel.cs" />
+    <Compile Include="Core\MNDebug.cs" />
+    <Compile Include="Core\MNGameResult.cs" />
+    <Compile Include="Core\MNGameVocabulary.cs" />
+    <Compile Include="Core\MNI18n.cs" />
+    <Compile Include="Core\MNJoinRoomInvitationParams.cs" />
+    <Compile Include="Core\MNMD5.cs" />
+    <Compile Include="Core\MNOfflineScores.cs" />
+    <Compile Include="Core\MNPlatformWinPhone.cs" />
+    <Compile Include="Core\MNSession.cs" />
+    <Compile Include="Core\MNSmartFoxFacade.cs" />
+    <Compile Include="Core\MNSocNetSessionFB.cs" />
+    <Compile Include="Core\MNStrMaskStorage.cs" />
+    <Compile Include="Core\MNTrustedHosts.cs" />
+    <Compile Include="Core\MNUIWebViewHttpReqQueue.cs" />
+    <Compile Include="Core\MNURLDownloader.cs" />
+    <Compile Include="Core\MNURLFileDownloader.cs" />
+    <Compile Include="Core\MNURLStringDownloader.cs" />
+    <Compile Include="Core\MNURLTextDownloader.cs" />
+    <Compile Include="Core\MNUserCredentials.cs" />
+    <Compile Include="Core\MNUserProfileView.cs" />
+    <Compile Include="Core\MNUtils.cs" />
+    <Compile Include="Core\MNVarStorage.cs" />
+    <Compile Include="Core\MNXmlTools.cs" />
+    <Compile Include="Core\MNZipTool.cs" />
+    <Compile Include="Core\WS\Data\MNWSAnyGameItem.cs" />
+    <Compile Include="Core\WS\Data\MNWSAnyUserItem.cs" />
+    <Compile Include="Core\WS\Data\MNWSBuddyListItem.cs" />
+    <Compile Include="Core\WS\Data\MNWSCurrentUserInfo.cs" />
+    <Compile Include="Core\WS\Data\MNWSCurrUserSubscriptionStatus.cs" />
+    <Compile Include="Core\WS\Data\MNWSGenericItem.cs" />
+    <Compile Include="Core\WS\Data\MNWSLeaderboardListItem.cs" />
+    <Compile Include="Core\WS\Data\MNWSRoomListItem.cs" />
+    <Compile Include="Core\WS\Data\MNWSRoomUserInfoItem.cs" />
+    <Compile Include="Core\WS\Data\MNWSSessionSignedClientToken.cs" />
+    <Compile Include="Core\WS\Data\MNWSSystemGameNetStats.cs" />
+    <Compile Include="Core\WS\Data\MNWSUserGameCookie.cs" />
+    <Compile Include="Core\WS\IMNWSRequest.cs" />
+    <Compile Include="Core\WS\MNWSRequestContent.cs" />
+    <Compile Include="Core\WS\MNWSRequestError.cs" />
+    <Compile Include="Core\WS\MNWSRequestSender.cs" />
+    <Compile Include="Core\WS\MNWSResponse.cs" />
+    <Compile Include="Core\WS\Parser\IMNWSXmlDataParser.cs" />
+    <Compile Include="Core\WS\Parser\MNWSXmlGenericItemListParser.cs" />
+    <Compile Include="Core\WS\Parser\MNWSXmlGenericItemParser.cs" />
+    <Compile Include="DotNetZip\BZip2\BitWriter.cs" />
+    <Compile Include="DotNetZip\BZip2\BZip2Compressor.cs" />
+    <Compile Include="DotNetZip\BZip2\BZip2InputStream.cs" />
+    <Compile Include="DotNetZip\BZip2\BZip2OutputStream.cs" />
+    <Compile Include="DotNetZip\BZip2\ParallelBZip2OutputStream.cs" />
+    <Compile Include="DotNetZip\BZip2\Rand.cs" />
+    <Compile Include="DotNetZip\CommonSrc\CRC32.cs" />
+    <Compile Include="DotNetZip\Zip\EncryptionAlgorithm.cs" />
+    <Compile Include="DotNetZip\Zip\Events.cs" />
+    <Compile Include="DotNetZip\Zip\Exceptions.cs" />
+    <Compile Include="DotNetZip\Zip\ExtractExistingFileAction.cs" />
+    <Compile Include="DotNetZip\Zip\FileSelector.cs" />
+    <Compile Include="DotNetZip\Zip\OffsetStream.cs" />
+    <Compile Include="DotNetZip\Zip\Shared.cs" />
+    <Compile Include="DotNetZip\Zip\ZipConstants.cs" />
+    <Compile Include="DotNetZip\Zip\ZipCrypto.cs" />
+    <Compile Include="DotNetZip\Zip\ZipDirEntry.cs" />
+    <Compile Include="DotNetZip\Zip\ZipEntry.cs" />
+    <Compile Include="DotNetZip\Zip\ZipEntry.Extract.cs" />
+    <Compile Include="DotNetZip\Zip\ZipEntry.Read.cs" />
+    <Compile Include="DotNetZip\Zip\ZipEntry.Write.cs" />
+    <Compile Include="DotNetZip\Zip\ZipEntrySource.cs" />
+    <Compile Include="DotNetZip\Zip\ZipErrorAction.cs" />
+    <Compile Include="DotNetZip\Zip\ZipFile.AddUpdate.cs" />
+    <Compile Include="DotNetZip\Zip\ZipFile.cs" />
+    <Compile Include="DotNetZip\Zip\ZipFile.Events.cs" />
+    <Compile Include="DotNetZip\Zip\ZipFile.Extract.cs" />
+    <Compile Include="DotNetZip\Zip\ZipFile.Read.cs" />
+    <Compile Include="DotNetZip\Zip\ZipFile.Save.cs" />
+    <Compile Include="DotNetZip\Zip\ZipFile.Selector.cs" />
+    <Compile Include="DotNetZip\Zip\ZipFile.x-IEnumerable.cs" />
+    <Compile Include="DotNetZip\Zip\ZipInputStream.cs" />
+    <Compile Include="DotNetZip\Zip\ZipOutputStream.cs" />
+    <Compile Include="DotNetZip\Zip\ZipSegmentedStream.cs" />
+    <Compile Include="DotNetZip\Zlib\Deflate.cs" />
+    <Compile Include="DotNetZip\Zlib\DeflateStream.cs" />
+    <Compile Include="DotNetZip\Zlib\GZipStream.cs" />
+    <Compile Include="DotNetZip\Zlib\Inflate.cs" />
+    <Compile Include="DotNetZip\Zlib\InfTree.cs" />
+    <Compile Include="DotNetZip\Zlib\ParallelDeflateOutputStream.cs" />
+    <Compile Include="DotNetZip\Zlib\Tree.cs" />
+    <Compile Include="DotNetZip\Zlib\Zlib.cs" />
+    <Compile Include="DotNetZip\Zlib\ZlibBaseStream.cs" />
+    <Compile Include="DotNetZip\Zlib\ZlibCodec.cs" />
+    <Compile Include="DotNetZip\Zlib\ZlibConstants.cs" />
+    <Compile Include="DotNetZip\Zlib\ZlibStream.cs" />
+    <Compile Include="MNConst.cs" />
+    <Compile Include="MNDirect.cs" />
+    <Compile Include="MNDirectButton.cs" />
+    <Compile Include="MNDirectUIHelper.cs" />
+    <Compile Include="MNErrorInfo.cs" />
+    <Compile Include="MNGameParams.cs" />
+    <Compile Include="MNUserInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\MNAchievementsProvider.cs" />
+    <Compile Include="Providers\MNClientRobotsProvider.cs" />
+    <Compile Include="Providers\MNGameCookiesProvider.cs" />
+    <Compile Include="Providers\MNGameRoomCookiesProvider.cs" />
+    <Compile Include="Providers\MNGameSettingsProvider.cs" />
+    <Compile Include="Providers\MNMyHiScoresProvider.cs" />
+    <Compile Include="Providers\MNPlayerListProvider.cs" />
+    <Compile Include="Providers\MNScoreProgressProvider.cs" />
+    <Compile Include="Providers\MNServerInfoProvider.cs" />
+    <Compile Include="Providers\MNVItemsProvider.cs" />
+    <Compile Include="Providers\MNVShopProvider.cs" />
+    <Compile Include="Providers\MNWSProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\multinet.plist" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_bc_au.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_bc_ns.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_bc_ou.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_bl_au.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_bl_ns.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_bl_ou.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_br_au.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_br_ns.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_br_ou.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_ml_au.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_ml_ns.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_ml_ou.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_mr_au.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_mr_ns.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_mr_ou.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_tc_au.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_tc_ns.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_tc_ou.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_tl_au.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_tl_ns.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_tl_ou.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_tr_au.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_tr_ns.png" />
+    <Resource Include="Assets\MNDirectButton\mn_direct_button_tr_ou.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\images-pp\orbit\loader.gif" />
+    <Resource Include="Assets\images-pp\orbit\playphone_logo_loading.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
