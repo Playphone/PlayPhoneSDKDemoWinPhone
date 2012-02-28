@@ -101,6 +101,12 @@
     <Compile Include="miniview\veconomy\VirtualItems.xaml.cs">
       <DependentUpon>VirtualItems.xaml</DependentUpon>
     </Compile>
+    <Compile Include="miniview\veconomy\VShop.xaml.cs">
+      <DependentUpon>VShop.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="miniview\veconomy\VShopPack.xaml.cs">
+      <DependentUpon>VShopPack.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="views\Achievements.xaml.cs">
       <DependentUpon>Achievements.xaml</DependentUpon>
@@ -191,6 +197,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="miniview\veconomy\VirtualItems.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="miniview\veconomy\VShop.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="miniview\veconomy\VShopPack.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

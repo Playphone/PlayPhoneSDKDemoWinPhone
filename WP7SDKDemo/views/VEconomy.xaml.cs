@@ -22,7 +22,7 @@ namespace WP7SDKDemo.views
 
         private void openPPStore(object sender, RoutedEventArgs e)
         {
-
+            NavigationService.Navigate(new Uri("/miniview/veconomy/VShop.xaml", UriKind.RelativeOrAbsolute));
         }
 
         private void openVirtualItems(object sender, RoutedEventArgs e)
