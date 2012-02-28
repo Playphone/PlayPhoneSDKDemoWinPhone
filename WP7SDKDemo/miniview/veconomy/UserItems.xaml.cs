@@ -72,7 +72,6 @@ namespace WP7SDKDemo.miniview.veconomy
         void UserItemsVItemsListUpdated()
         {
             item_chooser.ItemsSource = MNDirect.GetVItemsProvider().GetGameVItemsList();
-            item_chooser.SelectedIndex = 0;
 
             MNVItemsProvider.PlayerVItemInfo[] usrItems = MNDirect.GetVItemsProvider().GetPlayerVItemList();
             List<PlayerItem> processed = usrItems.Select(item => new PlayerItem(item)).ToList();
