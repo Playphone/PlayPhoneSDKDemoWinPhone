@@ -27,7 +27,7 @@ namespace WP7SDKDemo.views
 
         private void openVirtualItems(object sender, RoutedEventArgs e)
         {
-
+            NavigationService.Navigate(new Uri("/miniview/veconomy/VirtualItems.xaml", UriKind.RelativeOrAbsolute));
         }
 
         private void openUserItems(object sender, RoutedEventArgs e)
