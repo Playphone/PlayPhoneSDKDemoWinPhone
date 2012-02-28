@@ -41,7 +41,7 @@ namespace WP7SDKDemo.miniview.veconomy
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-            if(MNDirect.GetVShopProvider().IsVShopInfoNeedUpdate())
+            if (MNDirect.GetVItemsProvider().IsGameVItemsListNeedUpdate())
             {
                 MNDirect.GetVItemsProvider().VItemsListUpdated += VirtualItems_VItemsInfoUpdated;
                 MNDirect.GetVItemsProvider().DoGameVItemsListUpdate();
