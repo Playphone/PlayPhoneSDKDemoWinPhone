@@ -19,18 +19,6 @@ namespace WP7SDKDemo.views
 
     public partial class Login : PhoneApplicationPage
     {
-        private bool _isLoggedIn = false;
-
-        public bool isLoggedIn
-        {
-            get { return _isLoggedIn; }
-            set
-            {
-                _isLoggedIn = value;
-                this.caption.Text = value ? "Logout" : "Login";
-            }
-        }
-
         public Login()
         {
             InitializeComponent();
@@ -38,21 +26,23 @@ namespace WP7SDKDemo.views
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-            MNDirect.GetSession().SessionStatusChanged += this.onUserChanged;
-            isLoggedIn = MNDirect.GetSession().IsUserLoggedIn(); 
+            MNDirect.GetSession().SessionStatusChanged += onUserChanged;
+            if( MNDirect.GetSession().IsUserLoggedIn() )
+            {
+                onUserChanged(0, 0);
+            }
             base.OnNavigatedTo(e);
         }
 
         protected override void OnNavigatingFrom(System.Windows.Navigation.NavigatingCancelEventArgs e)
         {
-            MNDirect.GetSession().SessionStatusChanged -= this.onUserChanged;
+            MNDirect.GetSession().SessionStatusChanged -= onUserChanged;
             base.OnNavigatingFrom(e);
         }
 
         private void Loginout_Click(object sender, RoutedEventArgs e)
         {
-            
-            if (!isLoggedIn)
+            if (!MNDirect.GetSession().IsUserLoggedIn())
             {
                 MNDirectUIHelper.ShowDashboard();
             }
@@ -64,14 +54,15 @@ namespace WP7SDKDemo.views
 
         private void onUserChanged(int newStatus, int oldStatus)
         {
-            isLoggedIn = newStatus >= MNConst.MN_LOGGEDIN;
-            if( isLoggedIn )
+            if(MNDirect.GetSession().IsUserLoggedIn())
             {
                 MNUserInfo info = MNDirect.GetSession().GetMyUserInfo();
                 status_txt.Text = info.UserName + " is logged in";
+                caption.Text = "Logout";
             }
             else
             {
+                caption.Text = "Login";
                 status_txt.Text = "User in not logged in";
             }
         }
