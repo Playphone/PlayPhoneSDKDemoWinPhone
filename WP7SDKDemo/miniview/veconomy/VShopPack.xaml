@@ -9,8 +9,8 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Portrait" Orientation="Portrait"
-    mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
+    SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
+    mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="480"
     shell:SystemTray.IsVisible="False">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
@@ -22,12 +22,48 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock x:Name="ApplicationTitle" Text="MY APPLICATION" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock x:Name="PageTitle" Text="page name" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock x:Name="ApplicationTitle" Text="PlayPhone SDK Demo" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock x:Name="PageTitle" Text="VShop pack" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0"></Grid>
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <StackPanel Orientation="Vertical">
+                <Image x:Name="icon" Height="150" Width="150"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Id: "/>
+                    <TextBlock x:Name="id"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Name: "/>
+                    <TextBlock x:Name="name"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Category: "/>
+                    <TextBlock x:Name="category"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Width="Auto">
+                    <TextBlock Text="Description: "/>
+                    <TextBlock x:Name="description" TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Width="Auto">
+                    <TextBlock Text="Price: "/>
+                    <TextBlock x:Name="price" TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Width="Auto">
+                    <TextBlock Text="Is hidden: " VerticalAlignment="Center"/>
+                    <CheckBox IsEnabled="False" x:Name="is_hidden" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Width="Auto">
+                    <TextBlock Text="Hold sales: " VerticalAlignment="Center"/>
+                    <CheckBox IsEnabled="False" x:Name="hold_sales" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Width="Auto">
+                    <TextBlock Text="Params: "/>
+                    <TextBlock x:Name="pack_params" TextWrapping="Wrap"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
     </Grid>
  
     <!--Sample code showing usage of ApplicationBar-->

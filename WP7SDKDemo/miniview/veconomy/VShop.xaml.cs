@@ -70,7 +70,7 @@ namespace WP7SDKDemo.miniview.veconomy
 
         private void showPackInfo(object sender, RoutedEventArgs e)
         {
-            MNVShopProvider.VShopPackInfo item = ((Button)sender).DataContext as MNVShopProvider.VShopPackInfo;
+            VShopPackItem item = ((Button)sender).DataContext as VShopPackItem;
             if (item != null)
             {
                 NavigationService.Navigate(new Uri("/miniview/veconomy/VShopPack.xaml" + String.Format("?Id={0}", item.Id), UriKind.RelativeOrAbsolute));

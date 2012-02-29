@@ -24,9 +24,6 @@
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <controls:Pivot Title="PlayPhone SDK Demo">
-                <controls:PivotItem Header="Store">
-                    <TextBlock Text="Not implemented yet"/>
-                </controls:PivotItem>
                 <controls:PivotItem Header="Categories">
                     <Grid>
                         <ListBox x:Name="categories" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
@@ -70,6 +67,9 @@
                             </ListBox.ItemTemplate>
                         </ListBox>
                     </Grid>
+                </controls:PivotItem>
+                <controls:PivotItem Header="Store">
+                    <TextBlock Text="Not implemented yet"/>
                 </controls:PivotItem>
             </controls:Pivot>
         </Grid>

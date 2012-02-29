@@ -13,7 +13,9 @@ using Microsoft.Phone.Controls;
 
 namespace WP7SDKDemo.miniview.veconomy
 {
+    using System.Windows.Media.Imaging;
     using PlayPhone.MultiNet;
+    using PlayPhone.MultiNet.Providers;
 
     public partial class VShopPack : PhoneApplicationPage
     {
@@ -28,13 +30,26 @@ namespace WP7SDKDemo.miniview.veconomy
             int itemId = -1;
             if (Int32.TryParse(parameters["Id"], out itemId))
             {
-//                MNVItemsProvider.GameVItemInfo item = MNDirect.GetVItemsProvider().FindGameVItemById(itemId);
-//                icon.Source = new BitmapImage(new Uri(MNDirect.GetVItemsProvider().GetVItemImageURL(itemId)));
-//                id.Text = item.Id.ToString();
-//                name.Text = item.Name;
-//                model.Text = item.Model.ToString();
-//                description.Text = item.Description;
-//                additional_params.Text = item.Params;
+                icon.Source = new BitmapImage(new Uri(MNDirect.GetVShopProvider().GetVShopPackImageURL(itemId)));
+
+                MNVShopProvider.VShopPackInfo info = MNDirect.GetVShopProvider().FindVShopPackById(itemId);
+                id.Text = info.Id.ToString();
+                name.Text = info.Name;
+
+                MNVShopProvider.VShopCategoryInfo ci = MNDirect.GetVShopProvider().FindVShopCategoryById(info.CategoryId);
+                if(ci != null)
+                {
+                    category.Text = ci.Name;
+                }
+
+                description.Text = info.Description;
+                price.Text = "( $" + (double)info.PriceValue / 100 + " )";
+
+
+                is_hidden.IsChecked = (info.Model & MNVShopProvider.VShopPackInfo.IS_HIDDEN_MASK) != 0;
+                hold_sales.IsChecked = (info.Model & MNVShopProvider.VShopPackInfo.IS_HOLD_SALES_MASK) != 0;
+
+                pack_params.Text = info.AppParams;
             }
             base.OnNavigatedTo(e);
         }
