@@ -29,6 +29,7 @@ namespace WP7SDKDemo
         {
             InitializeComponent();
             MNDirect.Init(GAME_ID, MNDirect.MakeGameSecretByComponents(APISECRET1, APISECRET2, APISECRET3, APISECRET4));
+            MNDirectButton.InitWithLocation(MNDirectButton.MNDIRECTBUTTON_TOPRIGHT);
             MNDirectButton.Show();
 
             initList();
@@ -36,24 +37,26 @@ namespace WP7SDKDemo
 
         private void initList()
         {
-            List<MainListItem> data = new List<MainListItem>();
+            List<MainListItem> data = new List<MainListItem>
+                                          {
+                                              new MainListItem("1.Required integration"),
+                                              new MainListItem("    Login user", "/views/Login.xaml"),
+                                              new MainListItem("    Dashboard", "/views/Dashboard.xaml"),
+                                              new MainListItem("    Virtual economy", "/views/VEconomy.xaml"),
+                                              new MainListItem("2.Advanced features"),
+                                              new MainListItem("    Current user info", "/views/UsrInfo.xaml"),
+                                              new MainListItem("    Leaderboards", "/views/Leaderboards.xaml"),
+                                              new MainListItem("    Achievements", "/views/Achievements.xaml"),
+                                              new MainListItem("    Social graph", "/views/Social.xaml"),
+                                              new MainListItem("    Dashboard control", "/views/DashboardControl.xaml"),
+                                              new MainListItem("    Cloud storage", "/views/Cloud.xaml"),
+                                              new MainListItem("    Game settings", "/views/Settings.xaml"),
+                                              new MainListItem("    Room cookies", "/views/RoomCookies.xaml"),
+                                              new MainListItem("    Multiplayer basics", "/views/Multinet.xaml"),
+                                              new MainListItem("    Server info", "/views/ServerInfo.xaml"),
+                                              new MainListItem("    Application info", "/views/AppInfo.xaml"),
+                                          };
 
-            data.Add(new MainListItem("1.Required integration"));
-            data.Add(new MainListItem("    Login user", "/views/Login.xaml"));
-            data.Add(new MainListItem("    Dashboard", "/views/Dashboard.xaml"));
-            data.Add(new MainListItem("    Virtual economy", "/views/VEconomy.xaml"));
-            data.Add(new MainListItem("2.Advanced features"));
-            data.Add(new MainListItem("    Current user info", "/views/UsrInfo.xaml"));
-            data.Add(new MainListItem("    Settings info", "/views/Settings.xaml"));
-            data.Add(new MainListItem("    Leaderboards", "/views/Leaderboards.xaml"));
-            data.Add(new MainListItem("    Achievements", "/views/Achievements.xaml"));
-            data.Add(new MainListItem("    Social graph", "/views/Social.xaml"));
-            data.Add(new MainListItem("    Dashboard control", "/views/DashboardControl.xaml"));
-            data.Add(new MainListItem("    Cloud storage", "/views/Cloud.xaml"));
-            data.Add(new MainListItem("    Room cookies", "/views/RoomCookies.xaml"));
-            data.Add(new MainListItem("    Application info", "/views/AppInfo.xaml"));
-            data.Add(new MainListItem("    Multinet", "/views/Multinet.xaml"));
-            data.Add(new MainListItem("    Server info", "/views/ServerInfo.xaml"));
             lb1.ItemsSource = data;
         }
 
