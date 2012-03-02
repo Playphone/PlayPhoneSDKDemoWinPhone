@@ -210,7 +210,7 @@ namespace PlayPhone.MultiNet
        }
       else
        {
-        y = 0;
+        y = (int)MNPlatformWinPhone.GetSystemTrayHeight();
        }
      }
 

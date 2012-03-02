@@ -15,8 +15,6 @@ using PlayPhone.MultiNet.Core;
 
 namespace WP7SDKDemo.views
 {
-    using System.Windows.Media.Imaging;
-
     public partial class Login : PhoneApplicationPage
     {
         public Login()

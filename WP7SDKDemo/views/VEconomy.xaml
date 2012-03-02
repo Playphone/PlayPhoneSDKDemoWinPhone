@@ -10,7 +10,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
-    mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
+    mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="480"
     shell:SystemTray.IsVisible="False">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
@@ -29,14 +29,14 @@
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <StackPanel Orientation="Vertical">
+                <Button Click="openVirtualItems"  Width="Auto" Height="80" VerticalAlignment="Top">
+                    <Button.Content>
+                        <TextBlock Text="vItems"/>
+                    </Button.Content>
+                </Button>
                 <Button Click="openPPStore"  Width="Auto" Height="80" VerticalAlignment="Top">
                     <Button.Content>
                         <TextBlock Text="Playphone store"/>
-                    </Button.Content>
-                </Button>
-                <Button Click="openVirtualItems"  Width="Auto" Height="80" VerticalAlignment="Top">
-                    <Button.Content>
-                        <TextBlock Text="Virtual items"/>
                     </Button.Content>
                 </Button>
                 <Button Click="openUserItems"  Width="Auto" Height="80" VerticalAlignment="Top">

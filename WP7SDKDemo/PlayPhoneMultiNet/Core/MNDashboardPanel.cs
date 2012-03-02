@@ -15,12 +15,18 @@ namespace PlayPhone.MultiNet.Core
    {
     protected override Size MeasureOverride(Size availableSize)
      {
+      Size   screenSize = Application.Current.RootVisual.RenderSize;
+      double height = Double.IsInfinity(availableSize.Height) ? screenSize.Height - MNPlatformWinPhone.GetSystemTrayHeight() : availableSize.Height;
+      double width  = Double.IsInfinity(availableSize.Width)  ? screenSize.Width  : availableSize.Width;
+
+      Size resultSize = new Size(width,height);
+
       foreach (UIElement child in Children)
        {
-        child.Measure(new Size(double.PositiveInfinity,double.PositiveInfinity));
+        child.Measure(resultSize);
        }
 
-      return Application.Current.RootVisual.RenderSize;
+      return resultSize;
      }
 
     protected override Size ArrangeOverride(Size finalSize)

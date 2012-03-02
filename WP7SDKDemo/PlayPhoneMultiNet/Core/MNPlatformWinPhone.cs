@@ -14,6 +14,7 @@ using System.Windows.Resources;
 using System.Xml;
 
 using Microsoft.Phone.Info;
+using Microsoft.Phone.Shell;
 
 namespace PlayPhone.MultiNet.Core
  {
@@ -434,6 +435,11 @@ namespace PlayPhone.MultiNet.Core
       return sourceStreamInfo;
      }
 
+    public static double GetSystemTrayHeight ()
+     {
+      return SystemTray.IsVisible ? SystemTrayPortraitHeight : 0;
+     }
+
     private const int DEVICE_TYPE_CODE = 5000;
     private const string DEVICE_OS_NAME         = "WinPhone";
     private const string ASSEMBLY_NAME          = "PlayPhoneMultiNet";
@@ -446,5 +452,7 @@ namespace PlayPhone.MultiNet.Core
     private const string MULTINET_APPEXT_PARAMS_PREFIX = "appext_";
 
     private const string MULTINET_CONFIG_URL_PARAM = "MultiNetConfigServerURL";
+
+    private const double SystemTrayPortraitHeight = 32.0;
    }
  }

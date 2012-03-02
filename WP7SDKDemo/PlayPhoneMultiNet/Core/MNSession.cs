@@ -1212,7 +1212,13 @@ namespace PlayPhone.MultiNet.Core
         configLoadedEventHandler();
        }
 
-      if (fastResumeEnabled && smartFoxFacade.configData.tryFastResumeMode != 0)
+      if      (fastResumeEnabled && smartFoxFacade.configData.tryFastResumeMode == 2)
+       {
+        fastResumeEnabled = false;
+
+        LoginAuto();
+       }
+      else if (fastResumeEnabled && smartFoxFacade.configData.tryFastResumeMode != 0)
        {
         fastResumeEnabled = false;
 
