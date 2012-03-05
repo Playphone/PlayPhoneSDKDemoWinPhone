@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -69,7 +70,39 @@
                     </Grid>
                 </controls:PivotItem>
                 <controls:PivotItem Header="Store">
-                    <TextBlock Text="Not implemented yet"/>
+                    <Grid>
+                        <StackPanel Orientation="Vertical">
+                            <toolkit:ListPicker x:Name="shop_pack_picker" SelectionChanged="shop_pack_picker_SelectionChanged">
+                                <toolkit:ListPicker.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Id}" Margin="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                            <TextBlock Text="{Binding Name}" Margin="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </toolkit:ListPicker.ItemTemplate>
+                                <toolkit:ListPicker.FullModeItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Id}" Margin="5 5 5 5" FontSize="32" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                            <TextBlock Text="{Binding Name}" Margin="5 5 5 5" FontSize="32" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </toolkit:ListPicker.FullModeItemTemplate>
+                            </toolkit:ListPicker>
+                            <Button Click="buyPack"  Width="Auto">
+                                <Button.Content>
+                                    <TextBlock Text="Buy"/>
+                                </Button.Content>
+                            </Button>
+                            <Button Click="buyForCurrency"  Width="Auto">
+                                <Button.Content>
+                                    <TextBlock Text="Buy (vcurrency)"/>
+                                </Button.Content>
+                            </Button>
+                            <TextBlock Text="Warning: This will actually charge the device depending on purchase method seect!" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Grid>
                 </controls:PivotItem>
             </controls:Pivot>
         </Grid>

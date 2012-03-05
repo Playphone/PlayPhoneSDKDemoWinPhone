@@ -8,7 +8,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -16,63 +16,70 @@
     shell:SystemTray.IsVisible="False">
 
     <Grid x:Name="LayoutRoot" Background="Transparent">
-        <controls:Pivot Title="PlayPhone SDK Demo">
-            <controls:PivotItem Header="Items">
-                <Grid>
-                    <ListBox x:Name="user_items" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Button Click="showItem" Width="Auto" Height="Auto" HorizontalContentAlignment="Left">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <controls:Pivot Title="PlayPhone SDK Demo">
+                <controls:PivotItem Header="Items">
+                    <Grid>
+                        <ListBox x:Name="user_items" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Click="showItem" Width="Auto" Height="Auto" HorizontalContentAlignment="Left">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Height="80" Width="80" Source="{Binding Image}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                                <TextBlock Text="{Binding Count}" Padding="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                                <TextBlock Text="{Binding Name}" Padding="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </controls:PivotItem>
+                <controls:PivotItem Header="Inventory">
+                    <Grid>
+                        <StackPanel Orientation="Vertical">
+                            <toolkit:ListPicker x:Name="item_chooser" SelectionChanged="item_chooser_SelectionChanged">
+                                <toolkit:ListPicker.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </DataTemplate>
+                                </toolkit:ListPicker.ItemTemplate>
+                                <toolkit:ListPicker.FullModeItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}" Margin="5 5 5 5" FontSize="32"/>
+                                    </DataTemplate>
+                                </toolkit:ListPicker.FullModeItemTemplate>
+                            </toolkit:ListPicker>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox x:Name="count" Width="150" Height="80"/>
+                                <Button Click="add"  Width="140" Height="80" Margin="5,0,0,0">
                                     <Button.Content>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Height="80" Width="80" Source="{Binding Image}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                                            <TextBlock Text="{Binding Count}" Padding="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                                            <TextBlock Text="{Binding Name}" Padding="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                                        </StackPanel>
+                                        <TextBlock Text="Add"/>
                                     </Button.Content>
                                 </Button>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </Grid>
-            </controls:PivotItem>
-            <controls:PivotItem Header="Inventory">
-                <Grid>
-                    <StackPanel Orientation="Vertical">
-                        <toolkit:ListPicker x:Name="item_chooser">
-                            <toolkit:ListPicker.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Name}" Width="Auto" />
-                                </DataTemplate>
-                            </toolkit:ListPicker.ItemTemplate>
-                            <toolkit:ListPicker.FullModeItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock FontSize="22" Margin="0,12,0,12" Text="{Binding Name}" Width="Auto"/>
-                                </DataTemplate>
-                            </toolkit:ListPicker.FullModeItemTemplate>
-                        </toolkit:ListPicker>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBox x:Name="count" Width="150" Height="80"/>
-                            <Button Click="add"  Width="150" Height="80" Padding="5,0,0,0">
-                                <Button.Content>
-                                    <TextBlock Text="Add"/>
-                                </Button.Content>
-                            </Button>
-                            <Button Click="remove"  Width="150" Height="80" Padding="5,0,0,0">
-                                <Button.Content>
-                                    <TextBlock Text="Remove"/>
-                                </Button.Content>
-                            </Button>
+                                <Button Click="remove"  Width="140" Height="80" Margin="5,0,0,0">
+                                    <Button.Content>
+                                        <TextBlock Text="Remove"/>
+                                    </Button.Content>
+                                </Button>
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
-                </Grid>
-            </controls:PivotItem>
-        </controls:Pivot>
+                    </Grid>
+                </controls:PivotItem>
+            </controls:Pivot>
+        </Grid>
     </Grid>
 
     <!--Sample code showing usage of ApplicationBar-->

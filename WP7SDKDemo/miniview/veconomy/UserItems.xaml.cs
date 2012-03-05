@@ -9,6 +9,10 @@ using System.Windows.Controls;
 
 namespace WP7SDKDemo.miniview.veconomy
 {
+    using System.Windows.Data;
+    using Microsoft.Phone.Controls;
+    using PlayPhone.MultiNet.Core;
+
     public partial class UserItems
     {
         public class PlayerItem
@@ -26,6 +30,8 @@ namespace WP7SDKDemo.miniview.veconomy
                 Image = new BitmapImage(new Uri(MNDirect.GetVItemsProvider().GetVItemImageURL(item.Id), UriKind.RelativeOrAbsolute));
             }
         }
+
+        private int selectedIndex = 0;
 
         public UserItems()
         {
@@ -46,7 +52,6 @@ namespace WP7SDKDemo.miniview.veconomy
             {
                 UserItemsVItemsListUpdated();
             }
-
             base.OnNavigatedTo(e);
         }
 
@@ -67,29 +72,40 @@ namespace WP7SDKDemo.miniview.veconomy
         void UserItems_VItemsTransactionCompleted(MNVItemsProvider.TransactionInfo transaction)
         {
             MessageBox.Show("Transaction ( id=" + transaction.ClientTransactionId + " ) completed");
+            updateUserItems();
         }
 
         void UserItemsVItemsListUpdated()
         {
+            var old = selectedIndex;
             item_chooser.ItemsSource = MNDirect.GetVItemsProvider().GetGameVItemsList();
+            item_chooser.SelectedIndex = old;
+            updateUserItems();
+        }
 
+        private void updateUserItems()
+        {
             MNVItemsProvider.PlayerVItemInfo[] usrItems = MNDirect.GetVItemsProvider().GetPlayerVItemList();
             List<PlayerItem> processed = usrItems.Select(item => new PlayerItem(item)).ToList();
-
             user_items.ItemsSource = processed;
         }
 
         private void remove(object sender, RoutedEventArgs e)
         {
-            MNVItemsProvider.GameVItemInfo selectedItem = (MNVItemsProvider.GameVItemInfo)item_chooser.SelectedItem;
+            ListPickerItem selectedItem = item_chooser.ItemContainerGenerator.ContainerFromIndex(item_chooser.SelectedIndex) as ListPickerItem;
             if (selectedItem != null)
             {
-                long numOfItems = 0;
-                if (Int64.TryParse(count.Text, out numOfItems))
+                var itemInfo = selectedItem.DataContext as MNVItemsProvider.GameVItemInfo;
+                if (itemInfo != null)
                 {
-                    long transactionId = MNDirect.GetVItemsProvider().GetNewClientTransactionId();
-                    MessageBox.Show("Transaction ( id=" + transactionId + " ) started. " + numOfItems + " items will be removed");
-                    MNDirect.GetVItemsProvider().ReqAddPlayerVItem(selectedItem.Id, -1 * numOfItems, transactionId);
+                    long numOfItems = 0;
+                    if (Int64.TryParse(count.Text, out numOfItems))
+                    {
+                        long transactionId = MNDirect.GetVItemsProvider().GetNewClientTransactionId();
+                        MessageBox.Show("Transaction ( id=" + transactionId + " ) started. " + numOfItems +
+                                        " items will be removed");
+                        MNDirect.GetVItemsProvider().ReqAddPlayerVItem(itemInfo.Id, -1 * numOfItems, transactionId);
+                    }
                 }
             }
         }
@@ -115,6 +131,17 @@ namespace WP7SDKDemo.miniview.veconomy
             if (item != null)
             {
                 NavigationService.Navigate(new Uri("/miniview/veconomy/ItemInfo.xaml" + String.Format("?Id={0}", item.Id), UriKind.RelativeOrAbsolute));
+            }
+        }
+
+        private void item_chooser_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.RemovedItems != null && e.RemovedItems.Count > 0)
+            {
+                if (item_chooser.SelectedItem != null)
+                {
+                    selectedIndex = item_chooser.SelectedIndex;
+                }
             }
         }
     }
