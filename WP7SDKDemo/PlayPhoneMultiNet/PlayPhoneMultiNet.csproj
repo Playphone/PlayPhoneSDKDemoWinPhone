@@ -177,6 +177,7 @@
     <Compile Include="Providers\MNServerInfoProvider.cs" />
     <Compile Include="Providers\MNVItemsProvider.cs" />
     <Compile Include="Providers\MNVShopProvider.cs" />
+    <Compile Include="Providers\MNVShopWSRequestHelper.cs" />
     <Compile Include="Providers\MNWSProvider.cs" />
   </ItemGroup>
   <ItemGroup>

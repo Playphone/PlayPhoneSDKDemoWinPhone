@@ -223,7 +223,7 @@ namespace PlayPhone.MultiNet
       playerListProvider      = new MNPlayerListProvider(session);
       scoreProgressProvider   = new MNScoreProgressProvider(session);
       vItemsProvider          = new MNVItemsProvider(session);
-      vShopProvider           = new MNVShopProvider(session);
+      vShopProvider           = new MNVShopProvider(session,vItemsProvider);
       gameSettingsProvider    = new MNGameSettingsProvider(session);
       serverInfoProvider      = new MNServerInfoProvider(session);
       wsProvider              = new MNWSProvider(session);

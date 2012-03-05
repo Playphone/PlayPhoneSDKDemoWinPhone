@@ -212,7 +212,7 @@ namespace PlayPhone.MultiNet.Providers
 
     public GameVItemInfo FindGameVItemById (int id)
      {
-      return GetGameVItemsListLow().First(value => value.Id == id);
+      return GetGameVItemsListLow().FirstOrDefault(value => value.Id == id);
      }
 
     public bool IsGameVItemsListNeedUpdate ()
@@ -308,7 +308,7 @@ namespace PlayPhone.MultiNet.Providers
 
     private PlayerVItemInfo SearchPlayerVItemInfoById (int vItemId)
      {
-      return playerVItems.First(value => value.Id == vItemId);
+      return playerVItems.FirstOrDefault(value => value.Id == vItemId);
      }
 
     public string GetVItemImageURL (int id)
@@ -464,7 +464,7 @@ namespace PlayPhone.MultiNet.Providers
       return transactionInfo;
      }
 
-    private TransactionInfo ApplyTransaction (Dictionary<string,string> _params, char vItemsItemSeparator, char vItemsFieldSeparator)
+    internal TransactionInfo ApplyTransaction (Dictionary<string,string> _params, char vItemsItemSeparator, char vItemsFieldSeparator)
      {
       long cliTransactionId = MNUtils.ParseLong(MNUtils.DictReadValue(_params,"client_transaction_id")) ?? 0;
       long srvTransactionId = MNUtils.ParseLong(MNUtils.DictReadValue(_params,"server_transaction_id")) ?? 0;

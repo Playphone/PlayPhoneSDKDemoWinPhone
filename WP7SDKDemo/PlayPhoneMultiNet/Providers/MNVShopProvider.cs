@@ -18,9 +18,52 @@ namespace PlayPhone.MultiNet.Providers
  {
   public class MNVShopProvider
    {
-    public delegate void VShopInfoUpdatedEventHandler ();
+    public delegate void VShopInfoUpdatedEventHandler         ();
+    public delegate void ShowDashboardEventHandler            ();
+    public delegate void HideDashboardEventHandler            ();
+    public delegate void CheckoutVShopPackSuccessEventHandler (CheckoutVShopPackSuccessInfo result);
+    public delegate void CheckoutVShopPackFailEventHandler    (CheckoutVShopPackFailInfo    result);
+    public delegate void VShopReadyStatusChangedEventHandler  (bool                        isVShopReady);
 
-    public event VShopInfoUpdatedEventHandler VShopInfoUpdated;
+    public event VShopInfoUpdatedEventHandler         VShopInfoUpdated;
+    public event ShowDashboardEventHandler            ShowDashboard;
+    public event HideDashboardEventHandler            HideDashboard;
+    public event CheckoutVShopPackSuccessEventHandler CheckoutVShopPackSuccess;
+    public event CheckoutVShopPackFailEventHandler    CheckoutVShopPackFail;
+    public event VShopReadyStatusChangedEventHandler  VShopReadyStatusChanged;
+
+    public class CheckoutVShopPackSuccessInfo
+     {
+      public MNVItemsProvider.TransactionInfo Transaction { get; private set; }
+
+      public CheckoutVShopPackSuccessInfo (MNVItemsProvider.TransactionInfo transaction)
+       {
+        Transaction = transaction;
+       }
+     }
+
+    public class CheckoutVShopPackFailInfo
+     {
+      public int    ErrorCode           { get; private set; }
+      public string ErrorMessage        { get; private set; }
+      public long   ClientTransactionId { get; private set; }
+
+      public const int ERROR_CODE_NO_ERROR            =    0;
+      public const int ERROR_CODE_USER_CANCEL         = -999;
+      public const int ERROR_CODE_UNDEFINED           = -998;
+      public const int ERROR_CODE_XML_PARSE_ERROR     = -997;
+      public const int ERROR_CODE_XML_STRUCTURE_ERROR = -996;
+      public const int ERROR_CODE_NETWORK_ERROR       = -995;
+      public const int ERROR_CODE_GENERIC             = -994;
+      public const int ERROR_CODE_WF_NOT_READY        =  200;
+
+      public CheckoutVShopPackFailInfo (int errorCode, string errorMessage, long cliTransactionId)
+       {
+        ErrorCode           = errorCode;
+        ErrorMessage        = errorMessage;
+        ClientTransactionId = cliTransactionId;
+       }
+     }
 
     public class VShopDeliveryInfo
      {
@@ -79,15 +122,26 @@ namespace PlayPhone.MultiNet.Providers
        }
      }
 
-    public MNVShopProvider (MNSession session)
+    public MNVShopProvider (MNSession session, MNVItemsProvider vItemsProvider)
      {
-      this.session = session;
+      this.session        = session;
+      this.vItemsProvider = vItemsProvider;
+
+      requestHelper = new MNVShopWSRequestHelper(session,new RequestHelperEventHandler(this));
 
       session.GetGameVocabulary().DownloadFinished += OnVocabularyDownloadFinished;
+
+      session.ExecUICommandReceived   += OnSessionExecUICommandReceived;
+      session.VShopReadyStatusChanged += OnSessionVShopReadyStatusChanged;
      }
 
     public void Shutdown ()
      {
+      session.ExecUICommandReceived   -= OnSessionExecUICommandReceived;
+      session.VShopReadyStatusChanged -= OnSessionVShopReadyStatusChanged;
+
+      requestHelper.Shutdown();
+
       session.GetGameVocabulary().DownloadFinished -= OnVocabularyDownloadFinished;
      }
 
@@ -249,12 +303,12 @@ namespace PlayPhone.MultiNet.Providers
 
     public VShopPackInfo FindVShopPackById (int id)
      {
-      return GetVShopPackListLow().First(value => value.Id == id);
+      return GetVShopPackListLow().FirstOrDefault(value => value.Id == id);
      }
 
     public VShopCategoryInfo FindVShopCategoryById (int id)
      {
-      return GetVShopCategoryListLow().First(value => value.Id == id);
+      return GetVShopCategoryListLow().FirstOrDefault(value => value.Id == id);
      }
 
     public bool IsVShopInfoNeedUpdate ()
@@ -292,6 +346,214 @@ namespace PlayPhone.MultiNet.Providers
        }
      }
 
+    public void ExecCheckoutVShopPacks (int[] packIdArray,
+                                        int[] packCountArray,
+                                        long  cliTransactionId)
+     {
+      if (session.IsWebShopReady())
+       {
+        session.ExecAppCommand
+         ("jumpToBuyVShopPackRequestDialogSimple",
+          "pack_id=" + string.Join(",",packIdArray) + "&" +
+          "buy_count=" + string.Join(",",packCountArray) + "&" +
+          "client_transaction_id=" + cliTransactionId.ToString());
+       }
+      else
+       {
+        string errorMessage = session.VarStorageGetValueForVariable
+                               ("hook.ui.shop_not_ready_error_message");
+
+        if (errorMessage == null)
+         {
+          errorMessage = MNI18n.GetLocalizedString
+                          ("Purchase system is loading. Please rety later.",
+                           MNI18n.MESSAGE_CODE_PURCHASE_SYSTEM_IS_NOT_READY_ERROR);
+         }
+
+        DispatchCheckoutFailedEvent(CheckoutVShopPackFailInfo.ERROR_CODE_WF_NOT_READY,errorMessage,cliTransactionId);
+       }
+     }
+
+    public void ProcCheckoutVShopPacksSilent (int[] packIdArray,
+                                              int[] packCountArray,
+                                              long  cliTransactionId)
+     {
+      string webServerUrl = session.GetWebServerURL();
+
+      if (webServerUrl != null)
+       {
+        Dictionary<string,string> queryParams = new Dictionary<string,string>();
+
+        queryParams["proc_pack_id"]    = string.Join(",",packIdArray);
+        queryParams["proc_pack_count"] = string.Join(",",packCountArray);
+        queryParams["proc_client_transaction_id"] = cliTransactionId.ToString();
+
+        requestHelper.SendWSRequest
+         (webServerUrl + "/" + SilentPurchaseWebServicePath,
+          queryParams,cliTransactionId);
+       }
+      else
+       {
+        DispatchCheckoutFailedEvent
+         (CheckoutVShopPackFailInfo.ERROR_CODE_NETWORK_ERROR,
+          "checkout endpoint is unreachable",
+          cliTransactionId);
+       }
+     }
+
+    public bool isVShopReady ()
+     {
+      return session.IsWebShopReady();
+     }
+
+    private void DispatchCheckoutSucceededEvent (MNVItemsProvider.TransactionInfo transactionInfo)
+     {
+      CheckoutVShopPackSuccessInfo info = new CheckoutVShopPackSuccessInfo(transactionInfo);
+
+      CheckoutVShopPackSuccessEventHandler handler = CheckoutVShopPackSuccess;
+
+      if (handler != null)
+       {
+        handler(info);
+       }
+     }
+
+    private void DispatchCheckoutFailedEvent (int errorCode, string errorMessage, long cliTransactionId)
+     {
+      CheckoutVShopPackFailInfo info = new CheckoutVShopPackFailInfo(errorCode,errorMessage,cliTransactionId);
+
+      CheckoutVShopPackFailEventHandler handler = CheckoutVShopPackFail;
+
+      if (handler != null)
+       {
+        handler(info);
+       }
+     }
+
+    private class RequestHelperEventHandler : MNVShopWSRequestHelper.IEventHandler
+     {
+      public RequestHelperEventHandler (MNVShopProvider parent)
+       {
+        this.parent = parent;
+       }
+
+      public bool VShopShouldParseResponse        (long   userId)
+       {
+        return userId == parent.session.GetMyUserId();
+       }
+
+      public void VShopPostVItemTransaction       (long   srvTransactionId,
+                                                    long   cliTransactionId,
+                                                    string itemsToAddStr,
+                                                    bool   vShopTransactionEnabled)
+       {
+        Dictionary<string,string> queryParams = new Dictionary<string,string>();
+
+        queryParams["server_transaction_id"] = srvTransactionId.ToString();
+        queryParams["client_transaction_id"] = cliTransactionId.ToString();
+        queryParams["items_to_add"]          = itemsToAddStr;
+
+        MNVItemsProvider.TransactionInfo transactionInfo
+         = parent.vItemsProvider.ApplyTransaction(queryParams,',',':');
+
+        if (transactionInfo != null)
+         {
+          if (vShopTransactionEnabled)
+           {
+            parent.DispatchCheckoutSucceededEvent(transactionInfo);
+           }
+         }
+        else
+         {
+          LogWarning("unable to process transaction - invalid parameters");
+         }
+       }
+
+      public void VShopPostVShopTransactionFailed (long   cliTransactionId,
+                                                    int    errorCode,
+                                                    string errorMessage)
+       {
+        parent.DispatchCheckoutFailedEvent(errorCode,errorMessage,cliTransactionId);
+       }
+
+      public void VShopFinishTransaction          (string transactionId)
+       {
+        // is not used for "silent" requests
+       }
+
+      public void VShopWSRequestFailed            (long   cliTransactionId,
+                                                    int    errorCode,
+                                                    string errorMessage)
+       {
+        parent.DispatchCheckoutFailedEvent(errorCode,errorMessage,cliTransactionId);
+       }
+
+      private MNVShopProvider parent;
+     }
+
+    private void OnSessionExecUICommandReceived  (string cmdName, string cmdParam)
+     {
+      if (cmdName == "onVShopNeedShowDashboard")
+       {
+        ShowDashboardEventHandler handler = ShowDashboard;
+
+        if (handler != null)
+         {
+          handler();
+         }
+       }
+      else if (cmdName == "onVShopNeedShowDashboard")
+       {
+        HideDashboardEventHandler handler = HideDashboard;
+
+        if (handler != null)
+         {
+          handler();
+         }
+       }
+      else
+       {
+        bool ok = cmdName == "afterBuyVShopPackRequestSuccess";
+
+        if (ok || cmdName == "afterBuyVShopPackRequestFail")
+         {
+          Dictionary<string,string> cmdParams = MNUtils.HttpGetRequestParseParams(cmdParam);
+
+          if (ok)
+           {
+            MNVItemsProvider.TransactionInfo transactionInfo
+             = vItemsProvider.ApplyTransaction(cmdParams,'\n','\t');
+
+            if (transactionInfo != null)
+             {
+              DispatchCheckoutSucceededEvent(transactionInfo);
+             }
+            else
+             {
+              LogWarning("unable to process transaction - invalid parameters");
+             }
+           }
+          else
+           {
+            DispatchCheckoutFailedEvent
+             (MNUtils.ParseInt(MNUtils.DictReadValue(cmdParams,"error_code")) ?? CheckoutVShopPackFailInfo.ERROR_CODE_UNDEFINED,
+              MNUtils.DictReadValue(cmdParams,"error_message") ?? "undefined error",
+              MNUtils.ParseLong(MNUtils.DictReadValue(cmdParams,"error_code")) ?? MNVItemsProvider.TRANSACTION_ID_UNDEFINED);
+           }
+         }
+       }
+     }
+
+    private void OnSessionVShopReadyStatusChanged (bool isVShopReady)
+     {
+      VShopReadyStatusChangedEventHandler handler =  VShopReadyStatusChanged;
+
+      if (handler != null)
+       {
+        handler(isVShopReady);
+       }
+     }
+
     private void OnVocabularyDownloadFinished (int downloadStatus)
      {
       if (downloadStatus >= 0)
@@ -310,10 +572,13 @@ namespace PlayPhone.MultiNet.Providers
       MNDebug.warning("MNVShopProvider: " + message);
      }
 
-    private MNSession session;
+    private MNSession              session;
+    private MNVItemsProvider       vItemsProvider;
+    private MNVShopWSRequestHelper requestHelper;
 
     private const string DATA_FILE_NAME = "MNVShopProvider.xml";
     private static readonly string[] VShopPackListEntriesXmlPath = { "GameVocabulary", "MNVShopProvider", "VShopPacks" };
     private static readonly string[] VShopCategoryListEntriesXmlPath = { "GameVocabulary", "MNVShopProvider", "VShopCategories" };
+    private const string SilentPurchaseWebServicePath = "user_ajax_proc_silent_purchase.php";
    }
  }

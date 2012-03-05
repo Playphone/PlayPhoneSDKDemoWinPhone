@@ -131,7 +131,7 @@ namespace PlayPhone.MultiNet.Providers
 
     public GameSettingInfo FindGameSettingById (int id)
      {
-      return GetGameSettingListLow().First(value => value.Id == id);
+      return GetGameSettingListLow().FirstOrDefault(value => value.Id == id);
      }
 
     public bool IsGameSettingListNeedUpdate ()

@@ -157,7 +157,7 @@ namespace PlayPhone.MultiNet.Providers
 
     public GameAchievementInfo FindGameAchievementById (int id)
      {
-      return GetGameAchievementsListLow().First(value => value.Id == id);
+      return GetGameAchievementsListLow().FirstOrDefault(value => value.Id == id);
      }
 
     public bool IsGameAchievementListNeedUpdate ()
