@@ -57,6 +57,7 @@ namespace WP7SDKDemo.miniview.veconomy
 
         protected override void OnNavigatingFrom(System.Windows.Navigation.NavigatingCancelEventArgs e)
         {
+            selectedIndex = 0;
             MNDirect.GetVItemsProvider().VItemsTransactionCompleted -= UserItems_VItemsTransactionCompleted;
             MNDirect.GetVItemsProvider().VItemsTransactionFailed -= UserItems_VItemsTransactionFailed;
             MNDirect.GetVItemsProvider().VItemsListUpdated -= UserItemsVItemsListUpdated;

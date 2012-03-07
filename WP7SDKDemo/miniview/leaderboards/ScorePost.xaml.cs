@@ -18,6 +18,7 @@ namespace WP7SDKDemo.miniview.leaderboards
 
     public partial class ScorePost : PhoneApplicationPage
     {
+        private int selectedIndex = 0;
         public ScorePost()
         {
             InitializeComponent();
@@ -26,7 +27,14 @@ namespace WP7SDKDemo.miniview.leaderboards
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
             complexityList.ItemsSource = Complexity.getProviderList();
+            complexityList.SelectedIndex = selectedIndex;
             base.OnNavigatedTo(e);
+        }
+
+        protected override void OnNavigatingFrom(System.Windows.Navigation.NavigatingCancelEventArgs e)
+        {
+            selectedIndex = 0;
+            base.OnNavigatingFrom(e);
         }
 
         private void postScore(object sender, RoutedEventArgs e)
@@ -47,6 +55,17 @@ namespace WP7SDKDemo.miniview.leaderboards
             else
             {
                 MessageBox.Show("Wrong score!");
+            }
+        }
+
+        private void complexityList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.RemovedItems != null && e.RemovedItems.Count > 0)
+            {
+                if (complexityList.SelectedItem != null)
+                {
+                    selectedIndex = complexityList.SelectedIndex;
+                }
             }
         }
     }

@@ -65,6 +65,7 @@ namespace WP7SDKDemo.miniview.veconomy
 
         protected override void OnNavigatingFrom(System.Windows.Navigation.NavigatingCancelEventArgs e)
         {
+            selectedIndex = 0;
             MNDirect.GetVShopProvider().VShopInfoUpdated -= VShop_VShopInfoUpdated;
             MNDirect.GetVShopProvider().HideDashboard -= VShop_HideDashboard;
             MNDirect.GetVShopProvider().ShowDashboard -= VShop_ShowDashboard;

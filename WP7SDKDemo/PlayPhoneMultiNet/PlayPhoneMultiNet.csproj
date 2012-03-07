@@ -181,7 +181,9 @@
     <Compile Include="Providers\MNWSProvider.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\multinet.plist" />
+    <Resource Include="Assets\multinet.plist">
+      <SubType>Designer</SubType>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\MNDirectButton\mn_direct_button_bc_au.png" />

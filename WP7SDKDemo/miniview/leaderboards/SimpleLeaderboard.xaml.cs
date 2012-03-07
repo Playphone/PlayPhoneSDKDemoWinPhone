@@ -22,6 +22,8 @@ namespace WP7SDKDemo.miniview.leaderboards
 
     public partial class SimpleLeaderboard : PhoneApplicationPage
     {
+        private int selectedIndex = 0;
+
         public SimpleLeaderboard()
         {
             InitializeComponent();
@@ -30,9 +32,16 @@ namespace WP7SDKDemo.miniview.leaderboards
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
             complexityList.ItemsSource = Complexity.getProviderList();
+            complexityList.SelectedIndex = selectedIndex;
             scopeList.ItemsSource = Scope.getFilledList();
             periodList.ItemsSource = Period.getFilledList(); 
             base.OnNavigatedTo(e);
+        }
+
+        protected override void OnNavigatingFrom(System.Windows.Navigation.NavigatingCancelEventArgs e)
+        {
+            selectedIndex = 0;
+            base.OnNavigatingFrom(e);
         }
         
         private void loadLeaderboard(object sender, RoutedEventArgs e)
@@ -50,6 +59,17 @@ namespace WP7SDKDemo.miniview.leaderboards
                                                 (complexityItem.DataContext as Complexity).Value);
 
                 NavigationService.Navigate(new Uri("/miniview/leaderboards/LeadersList.xaml" + param, UriKind.RelativeOrAbsolute));
+            }
+        }
+
+        private void complexityList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.RemovedItems != null && e.RemovedItems.Count > 0)
+            {
+                if (complexityList.SelectedItem != null)
+                {
+                    selectedIndex = complexityList.SelectedIndex;
+                }
             }
         }
     }

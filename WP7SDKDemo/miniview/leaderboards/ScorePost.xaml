@@ -30,7 +30,7 @@
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <StackPanel Orientation="Vertical">
-                <toolkit:ListPicker x:Name="complexityList">
+                <toolkit:ListPicker x:Name="complexityList" SelectionChanged="complexityList_SelectionChanged">
                     <toolkit:ListPicker.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Name}" Width="Auto"/>
