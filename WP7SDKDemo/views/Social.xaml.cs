@@ -20,6 +20,7 @@ using System.Windows.Navigation;
 namespace WP7SDKDemo.views
 {
     using System.Diagnostics;
+    using PlayPhone.MultiNet.Providers;
 
     public partial class Social : PhoneApplicationPage
     {
@@ -32,22 +33,22 @@ namespace WP7SDKDemo.views
 
         private void loadBuddies(object sender, RoutedEventArgs e)
         {
-            MNWSRequestContent content = new MNWSRequestContent();
-            blockName = content.AddCurrUserBuddyList();
-            MNWSRequestSender reqSender = new MNWSRequestSender(MNDirect.GetSession());
-            reqSender.SendWSRequestSmartAuth(content, OnWSRequestCompleted, OnWSRequestFailed);
+            MNWSInfoRequestCurrUserBuddyList req = new MNWSInfoRequestCurrUserBuddyList(onInfoReqComplete);
+            MNDirect.GetWSProvider().Send(req);
         }
 
-        private void OnWSRequestCompleted(MNWSResponse ret)
+        private void onInfoReqComplete(MNWSInfoRequestCurrUserBuddyList.RequestResult result)
         {
-            List<MNWSBuddyListItem> buddies = (List<MNWSBuddyListItem>)ret.GetDataForBlock(blockName);
-            List<BuddyListItem> data = buddies.Select(o => new BuddyListItem(o)).ToList();
-            this.buddy_list.ItemsSource = data;
-        }
-
-        private void OnWSRequestFailed(MNWSRequestError ret)
-        {
-            MessageBox.Show("Request failed: " + ret.Message);
+            if(!result.HadError)
+            {
+                MNWSBuddyListItem[] buddies = result.GetDataEntry();
+                List<BuddyListItem> data = buddies.Select(o => new BuddyListItem(o)).ToList();
+                this.buddy_list.ItemsSource = data;
+            }
+            else
+            {
+                MessageBox.Show("Request failed: " + result.ErrorMessage);
+            }
         }
 
         private void showDetails(object sender, RoutedEventArgs e)

@@ -15,38 +15,18 @@ namespace WP7SDKDemo.common
 {
     public class BuddyListItem
     {
-        private string name;
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
+        public string Name { get; set; }
 
-        private string status;
-        public string Status
-        {
-            get { return status; }
-            set { status = value; }
-        }
+        public string Status { get; set; }
 
-        private BitmapImage avatar;
-        public BitmapImage Avatar
-        {
-            get { return avatar; }
-            set { avatar = value; }
-        }
+        public BitmapImage Avatar { get; set; }
 
-        private MNWSBuddyListItem source;
-        public MNWSBuddyListItem Source
-        {
-            get { return source; }
-            set { source = value; }
-        }
+        public MNWSBuddyListItem Source { get; set; }
 
 
         public BuddyListItem(MNWSBuddyListItem item)
         {
-            source = item;
+            Source = item;
             Name = item.GetFriendUserNickName();
             Status = item.GetFriendUserOnlineNow().Value ? "online" : "offline";
             Avatar = new BitmapImage(new Uri(item.GetFriendUserAvatarUrl()));
