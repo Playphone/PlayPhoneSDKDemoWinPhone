@@ -71,7 +71,7 @@ namespace PlayPhone.MultiNet.Providers
       postQueryParams["ctx_user_id"]    = session.GetMyUserId().ToString();
       postQueryParams["ctx_user_sid"]   = userSId;
       postQueryParams["ctx_dev_type"]   = MNPlatformWinPhone.GetDeviceType().ToString();
-      postQueryParams["ctx_dev_id"]     = MNUtils.StringGetMD5String(MNPlatformWinPhone.GetUniqueDeviceIdentifier());
+      postQueryParams["ctx_dev_id"]     = MNUtils.StringGetMD5String(session.GetUniqueAppId());
       postQueryParams["ctx_client_ver"] = MNSession.CLIENT_API_VERSION;
 
       requests.SendRequestAsync(url,postQueryParams,cliTransactionId);

@@ -32,17 +32,16 @@ namespace PlayPhone.MultiNet.Core
     public OnConfigLoaded      onConfigLoaded;
     public OnConfigLoadFailed  onConfigLoadFailed;
 
-    public MNSmartFoxFacade(Uri configUri)
+    public MNSmartFoxFacade(MNSession session, Uri configUri)
      {
-      MNDebug.todo("MNSmartFoxFacade: disable sfs debug");
-
-      smartFox            = new SmartFoxClient(true);
+      smartFox            = new SmartFoxClient(false);
       state               = State.Disconnected;
+      this.session        = session;
       configData          = new MNConfigData(configUri);
       loginOnConfigLoaded = false;
       lobbyRoomId         = MNSession.MN_LOBBY_ROOM_ID_UNDEFINED;
 
-      MNDebug.todo("MNSmartFoxFacade: activity stream");
+//      MNDebug.todo("MNSmartFoxFacade: connection activity");
 
       SFSEvent.onConnection        += OnSmartFoxConnection;
       SFSEvent.onConnectionLost    += OnSmartFoxConnectionLost;
@@ -115,11 +114,11 @@ namespace PlayPhone.MultiNet.Core
        }
      }
 
-    public void Login (String zone, String userLogin, String userPassword)
+    public void Login (String zone, String userLogin, StructuredPassword userPassword)
      {
 //      connectionActivity.cancel();
 
-      MNDebug.todo("MNSmartFoxFacade: connection activity");
+//      MNDebug.todo("MNSmartFoxFacade: connection activity");
 
       autoJoinInvoked = true; /* to prevent autoJoin to to be invoked in onRoomListUpdate handler */
 
@@ -137,7 +136,7 @@ namespace PlayPhone.MultiNet.Core
 
     public void Logout ()
      {
-      MNDebug.todo("MNSmartFoxFacade: connection activity");
+//      MNDebug.todo("MNSmartFoxFacade: connection activity");
 
       // connectionActivity.cancel();
 
@@ -168,7 +167,7 @@ namespace PlayPhone.MultiNet.Core
       return userLogin;
      }
 
-    public void UpdateLoginInfo (string userLogin, string userPassword)
+    public void UpdateLoginInfo (string userLogin, StructuredPassword userPassword)
      {
       this.userLogin    = userLogin;
       this.userPassword = userPassword;
@@ -241,13 +240,13 @@ namespace PlayPhone.MultiNet.Core
        {
         if (success)
          {
-          MNDebug.todo("MNSmartFoxFacade: connection activity");
+//          MNDebug.todo("MNSmartFoxFacade: connection activity");
 
           // connectionActivity.connectionEstablished();
 
           state = State.Connected;
 
-          smartFox.Login(zone,userLogin,userPassword);
+          smartFox.Login(zone,userLogin,userPassword.BuildPassword(MNUtils.StringGetMD5String(session.GetUniqueAppId())));
          }
         else
          {
@@ -260,7 +259,7 @@ namespace PlayPhone.MultiNet.Core
             onLoginFailed(error);
            }
 
-          MNDebug.todo("MNSmartFoxFacade: connection activity");
+//          MNDebug.todo("MNSmartFoxFacade: connection activity");
 
           // connectionActivity.connectionFailed();
          }
@@ -458,16 +457,34 @@ namespace PlayPhone.MultiNet.Core
       Disconnected, LoadingConfig, Connecting, Connected, LoggedIn
      }
 
+    public class StructuredPassword
+     {
+      public  StructuredPassword (string passwordPrefix, string passwordSuffix)
+       {
+        prefix = passwordPrefix;
+        suffix = passwordSuffix;
+       }
+
+      public string BuildPassword (string uniqueId)
+       {
+        return prefix + uniqueId + suffix;
+       }
+
+      private string prefix;
+      private string suffix;
+     }
+
     public MNConfigData    configData;
 
-    internal SmartFoxClient smartFox;
-    private string         zone;
-    private string         userLogin;
-    private string         userPassword;
-    private State          state;
-    private bool           autoJoinInvoked;
-    private bool           loginOnConfigLoaded;
-    private int            lobbyRoomId;
+    internal SmartFoxClient    smartFox;
+    private MNSession          session;
+    private string             zone;
+    private string             userLogin;
+    private StructuredPassword userPassword;
+    private State              state;
+    private bool               autoJoinInvoked;
+    private bool               loginOnConfigLoaded;
+    private int                lobbyRoomId;
 
     private MNSmartFoxFacadeSessionInfo sessionInfo;
    }

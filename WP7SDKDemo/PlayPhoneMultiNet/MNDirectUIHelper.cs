@@ -12,36 +12,44 @@ using System.Windows;
 using System.Windows.Media;
 
 using PlayPhone.MultiNet.Core;
+using Microsoft.Phone.Controls;
+using System.ComponentModel;
 
 namespace PlayPhone.MultiNet
  {
   public static class MNDirectUIHelper
    {
-    public enum Style { FULLSCREEN, POPUP };
+    public enum Style    { FULLSCREEN, POPUP };
+    public enum PageMode { SILVERLIGHT, XNA };
 
-    public delegate void OnShowDashboardEventHandler ();
-    public delegate void OnHideDashboardEventHandler ();
+    public delegate void OnShowDashboardEventHandler  ();
+    public delegate void OnHideDashboardEventHandler  ();
 
-    public static event OnShowDashboardEventHandler OnShowDashboard;
-    public static event OnHideDashboardEventHandler OnHideDashboard;
+    public static event OnShowDashboardEventHandler  OnShowDashboard;
+    public static event OnHideDashboardEventHandler  OnHideDashboard;
 
     public static void SetDashboardStyle (Style style)
      {
-      dashboardStyle = style;
+      LazyInit(style);
      }
 
     public static Style GetDashboardStyle ()
      {
-      return dashboardStyle;
+      LazyInit();
+
+      return dashboardView.DashboardStyle;
      }
 
     public static void ShowDashboard ()
      {
       LazyInit();
 
-      UpdateDashboardSize();
+      if (!isVisible)
+       {
+        OpenDashboard();
 
-      popup.IsOpen = true;
+        isVisible = true;
+       }
 
       OnShowDashboardEventHandler handler = OnShowDashboard;
 
@@ -55,7 +63,12 @@ namespace PlayPhone.MultiNet
      {
       LazyInit();
 
-      popup.IsOpen = false;
+      if (isVisible)
+       {
+        CloseDashboard();
+
+        isVisible = false;
+       }
 
       OnHideDashboardEventHandler handler = OnHideDashboard;
 
@@ -65,11 +78,111 @@ namespace PlayPhone.MultiNet
        }
      }
 
-    private static void LazyInit ()
+    private static void OpenDashboard ()
      {
-      if (popup == null)
+      if (pageMode == PageMode.SILVERLIGHT)
        {
-        CreatePopup();
+        popup        = new Popup();
+        popup.Child  = dashboardView.RootView;
+
+        UpdateDashboardSize();
+
+        popup.IsOpen = true;
+       }
+      else // (pageMode == PageMode.XNA)
+       {
+        if (parent != null)
+         {
+          parent.Children.Add(dashboardView.RootView);
+
+          UpdateDashboardSize();
+         }
+       }
+
+      MNDialogStack.AppendDialog(dismissibleDialog);
+     }
+
+    private static void CloseDashboard ()
+     {
+      MNDialogStack.RemoveDialog(dismissibleDialog);
+
+      if (pageMode == PageMode.SILVERLIGHT)
+       {
+        if (popup != null)
+         {
+          popup.IsOpen = false;
+          popup.Child  = null;
+          popup        = null;
+         }
+       }
+      else // (pageMode == PageMode.XNA)
+       {
+        if (parent != null)
+         {
+          if (!parent.Children.Remove(dashboardView.RootView))
+           {
+            MNDebug.warning("unable to remove dashboard view from layout root");
+           }
+         }
+       }
+     }
+
+    public static void NavigatedTo (PhoneApplicationPage page,
+                                    PageMode             pageMode   = PageMode.SILVERLIGHT,
+                                    Panel                layoutRoot = null)
+     {
+      LazyInit();
+
+      if (MNDirectUIHelper.page != null)
+       {
+        MNDebug.warning("NavigatedTo called without preceeding NavigatedFrom");
+
+        NavigatingFrom(MNDirectUIHelper.page);
+       }
+
+      MNDirectUIHelper.page     = page;
+      MNDirectUIHelper.pageMode = pageMode;
+      MNDirectUIHelper.parent   = layoutRoot;
+
+      DispatchNavigationEvent(NavigationEventArgs.EventType.NavigatedTo,page,pageMode,layoutRoot);
+
+      if (isVisible)
+       {
+        OpenDashboard();
+       }
+     }
+
+    public static void NavigatingFrom (PhoneApplicationPage page)
+     {
+      LazyInit();
+
+      if (isVisible)
+       {
+        CloseDashboard();
+       }
+
+      DispatchNavigationEvent(NavigationEventArgs.EventType.NavigatingFrom,page,pageMode,parent);
+
+      MNDirectUIHelper.page     = null;
+      MNDirectUIHelper.pageMode = PageMode.SILVERLIGHT;
+      MNDirectUIHelper.parent   = null;
+     }
+
+    private static void DispatchNavigationEvent (NavigationEventArgs.EventType type, PhoneApplicationPage page, PageMode mode, Panel parent)
+     {
+      OnPageNavigationEventHandler handler = OnPageNavigation;
+
+      if (handler != null)
+       {
+        handler(new NavigationEventArgs(type,page,mode,parent));
+       }
+     }
+
+    private static void LazyInit (Style dashboardStyle = Style.POPUP)
+     {
+      if (dashboardView == null)
+       {
+        dashboardView = new DashboardView(dashboardStyle);
 
         MNDirect.GetView().DoGoBack += OnDoGoBack;
        }
@@ -80,68 +193,135 @@ namespace PlayPhone.MultiNet
       HideDashboard();
      }
 
-    private static void CreatePopup ()
-     {
-      if (dashboardStyle == Style.POPUP)
-       {
-        CreateDashboardPopup();
-       }
-      else
-       {
-        CreateDashboardFullScreen();
-       }
-     }
-
-    private static void CreateDashboardPopup ()
-     {
-      popup = new Popup();
-
-      Border border = new Border();
-
-      border.BorderBrush     = new SolidColorBrush(Color.FromArgb(0x80,0x33,0x33,0x33));
-      border.BorderThickness = new Thickness(PopupBorderWidth);
-      border.CornerRadius    = new CornerRadius(PopupCornerRadius);
-
-      border.Child = MNDirect.GetView();
-      popup.Child  = border;
-     }
-
     private static void UpdateDashboardSize ()
      {
-      if (dashboardStyle == Style.POPUP)
-       {
-        Border border = (Border)popup.Child;
+      dashboardView.UpdateSize();
 
-        Size   rootSize      = Application.Current.RootVisual.RenderSize;
-        double sysTrayHeight = MNPlatformWinPhone.GetSystemTrayHeight();
-
-        border.Height = rootSize.Height - sysTrayHeight - 2 * PopupMargin;
-        border.Width  = rootSize.Width  - 2 * PopupMargin;
-
-        Thickness margin = new Thickness(PopupMargin);
-
-        margin.Top += sysTrayHeight;
-
-        border.Margin = margin;
-       }
-      else if (dashboardStyle == Style.FULLSCREEN)
+      if (dashboardView.DashboardStyle == Style.FULLSCREEN)
        {
         popup.VerticalOffset = MNPlatformWinPhone.GetSystemTrayHeight();
        }
      }
 
-    private static void CreateDashboardFullScreen ()
+    private class DashboardView
      {
-      popup = new Popup();
+      public DashboardView (Style dashboardStyle = Style.POPUP)
+       {
+        border = null;
 
-      popup.Child = MNDirect.GetView();
+        SetDashboardStyle(dashboardStyle);
+       }
+
+      public Style DashboardStyle
+       {
+        get
+         {
+          return border == null ? Style.FULLSCREEN : Style.POPUP;
+         }
+
+        set
+         {
+          SetDashboardStyle(value);
+         }
+       }
+
+      public UIElement RootView
+       {
+        get
+         {
+          return (UIElement)border ?? (UIElement)MNDirect.GetView();
+         }
+       }
+
+      public void UpdateSize ()
+       {
+        if (DashboardStyle == Style.POPUP)
+         {
+          Size   rootSize      = Application.Current.RootVisual.RenderSize;
+          double sysTrayHeight = MNPlatformWinPhone.GetSystemTrayHeight();
+
+          border.Height = rootSize.Height - sysTrayHeight - 2 * PopupMargin;
+          border.Width  = rootSize.Width  - 2 * PopupMargin;
+
+          Thickness margin = new Thickness(PopupMargin);
+
+          margin.Top += sysTrayHeight;
+
+          border.Margin = margin;
+         }
+       }
+
+      private void SetDashboardStyle (Style style)
+       {
+        if (DashboardStyle == style)
+         {
+          return;
+         }
+
+        if (style == Style.FULLSCREEN)
+         {
+          border.Child = null;
+          border       = null;
+         }
+        else
+         {
+          CreateBorder();
+
+          border.Child = MNDirect.GetView();
+         }
+       }
+
+      private void CreateBorder ()
+       {
+        border = new Border();
+
+        border.BorderBrush     = new SolidColorBrush(Color.FromArgb(0x80,0x33,0x33,0x33));
+        border.BorderThickness = new Thickness(PopupBorderWidth);
+        border.CornerRadius    = new CornerRadius(PopupCornerRadius);
+       }
+
+      private Border border;
+
+      private const int PopupBorderWidth  = 5;
+      private const int PopupCornerRadius = 5;
+      private const int PopupMargin       = 5;
      }
 
-    private static Popup popup = null;
-    private static Style dashboardStyle = Style.POPUP;
+    internal class NavigationEventArgs
+     {
+      public enum EventType { NavigatedTo, NavigatingFrom };
 
-    private const int PopupBorderWidth  = 5;
-    private const int PopupCornerRadius = 5;
-    private const int PopupMargin       = 5;
+      public EventType            Type   { get; private set; }
+      public PhoneApplicationPage Page   { get; private set; }
+      public PageMode             Mode   { get; private set; }
+      public Panel                Parent { get; private set; }
+
+      public NavigationEventArgs (EventType type, PhoneApplicationPage page, PageMode pageMode, Panel parent)
+       {
+        Type   = type;
+        Page   = page;
+        Mode   = pageMode;
+        Parent = parent;
+       }
+     }
+
+    private class DismissibleDashboardDialog : MNDialogStack.IDismissible
+     {
+      public void Dismiss ()
+       {
+        HideDashboard();
+       }
+     }
+
+    internal delegate void OnPageNavigationEventHandler (NavigationEventArgs args);
+    internal static  event OnPageNavigationEventHandler OnPageNavigation;
+
+    private static Popup                popup         = null;
+    private static DashboardView        dashboardView = null;
+    private static bool                 isVisible     = false;
+    private static DismissibleDashboardDialog dismissibleDialog = new DismissibleDashboardDialog();
+    internal static PhoneApplicationPage page         = null;
+    internal static PageMode             pageMode     = PageMode.SILVERLIGHT;
+    internal static Panel                parent       = null;
    }
  }

@@ -8,6 +8,7 @@
 using System;
 using PlayPhone.MultiNet.Core.Facebook;
 using System.IO;
+using System.Collections.Generic;
 
 namespace PlayPhone.MultiNet.Core
  {
@@ -116,6 +117,22 @@ namespace PlayPhone.MultiNet.Core
       permissionsDialog.DialogCompleted += eventHandler;
 
       permissionsDialog.Show();
+     }
+
+    public void ShowGenericDialog (string action, Dictionary<string,string> _params, MNFacebookDialog.DialogEventHandler eventHandler)
+     {
+      if (appId == null)
+       {
+        eventHandler(BuildAppIdUndefinedDialogResult());
+
+        return;
+       }
+
+      MNFacebookGenericDialog dialog = new MNFacebookGenericDialog(action,appId,AccessToken,_params);
+
+      dialog.DialogCompleted += eventHandler;
+
+      dialog.Show();
      }
 
     private void RestoreAccessToken ()

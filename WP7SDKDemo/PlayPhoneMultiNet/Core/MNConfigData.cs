@@ -30,20 +30,21 @@ namespace PlayPhone.MultiNet.Core
      {
       loaded = false;
 
-      smartFoxAddr          = null;
-      smartFoxPort          = 0;
-      blueBoxAddr           = null;
-      blueBoxPort           = 0;
-      smartConnect          = false;
-      webServerUrl          = null;
-      facebookAPIKey        = null;
-      facebookAppId         = null;
-      facebookSSOMode       = 0;
-      launchTrackerUrl      = null;
-      shutdownTrackerUrl    = null;
-      beaconTrackerUrl      = null;
-      gameVocabularyVersion = null;
-      tryFastResumeMode     = 0;
+      smartFoxAddr              = null;
+      smartFoxPort              = 0;
+      blueBoxAddr               = null;
+      blueBoxPort               = 0;
+      smartConnect              = false;
+      webServerUrl              = null;
+      facebookAPIKey            = null;
+      facebookAppId             = null;
+      facebookSSOMode           = 0;
+      launchTrackerUrl          = null;
+      shutdownTrackerUrl        = null;
+      beaconTrackerUrl          = null;
+      gameVocabularyVersion     = null;
+      tryFastResumeMode         = 0;
+      useInstallIdInsteadOfUDID = 0;
      }
 
     public void Load (OnConfigDataLoaded onConfigDataLoaded, OnConfigDataLoadFailed onConfigDataLoadFailed)
@@ -86,6 +87,7 @@ namespace PlayPhone.MultiNet.Core
           shutdownTrackerUrl    = DictGetStringOpt(parameters,"ShutdownTrackerURL");
           gameVocabularyVersion = DictGetStringOpt(parameters,"GameVocabularyVersion");
           tryFastResumeMode     = DictGetIntOpt(parameters,"TryFastResumeMode");
+          useInstallIdInsteadOfUDID = DictGetIntOpt(parameters,"UseInstallIdInsteadOfUDID");
 
           ok = true;
          }
@@ -192,20 +194,21 @@ namespace PlayPhone.MultiNet.Core
       return ok ? result : null;
      }
 
-    public string smartFoxAddr          { get; private set; }
-    public int    smartFoxPort          { get; private set; }
-    public string blueBoxAddr           { get; private set; }
-    public int    blueBoxPort           { get; private set; }
-    public bool   smartConnect          { get; private set; }
-    public string webServerUrl          { get; private set; }
-    public string facebookAPIKey        { get; private set; }
-    public string facebookAppId         { get; private set; }
-    public int    facebookSSOMode       { get; private set; }
-    public string launchTrackerUrl      { get; private set; }
-    public string beaconTrackerUrl      { get; private set; }
-    public string shutdownTrackerUrl    { get; private set; }
-    public string gameVocabularyVersion { get; private set; }
-    public int    tryFastResumeMode     { get; private set; }
+    public string smartFoxAddr              { get; private set; }
+    public int    smartFoxPort              { get; private set; }
+    public string blueBoxAddr               { get; private set; }
+    public int    blueBoxPort               { get; private set; }
+    public bool   smartConnect              { get; private set; }
+    public string webServerUrl              { get; private set; }
+    public string facebookAPIKey            { get; private set; }
+    public string facebookAppId             { get; private set; }
+    public int    facebookSSOMode           { get; private set; }
+    public string launchTrackerUrl          { get; private set; }
+    public string beaconTrackerUrl          { get; private set; }
+    public string shutdownTrackerUrl        { get; private set; }
+    public string gameVocabularyVersion     { get; private set; }
+    public int    tryFastResumeMode         { get; private set; }
+    public int    useInstallIdInsteadOfUDID { get; private set; }
 
     private readonly Uri           configUri;
     private bool                   loaded;

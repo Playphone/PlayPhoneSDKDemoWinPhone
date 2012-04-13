@@ -118,6 +118,11 @@ namespace PlayPhone.MultiNet.Core
       return DEVICE_TYPE_CODE;
      }
 
+    public static string GetDeviceModel ()
+     {
+      return DeviceStatus.DeviceName;
+     }
+
     public static string GetDeviceInfoString ()
      {
       TimeZoneInfo localTimeZone = TimeZoneInfo.Local;

@@ -72,6 +72,7 @@ namespace PlayPhone.MultiNet.Core
       appHostCallHandlers.Add("apphost_sn_facebook_logout.php",OnAppHostCallFacebookLogout);
       appHostCallHandlers.Add("apphost_sn_facebook_dialog_publish_show.php",OnAppHostCallFacebookDialogPublishShow);
       appHostCallHandlers.Add("apphost_sn_facebook_dialog_permission_req_show.php",OnAppHostCallFacebookDialogPermissionShow);
+      appHostCallHandlers.Add("apphost_sn_facebook_dialog_generic.php",OnAppHostCallFacebookDialogGenericShow);
       appHostCallHandlers.Add("apphost_webview_reload.php",OnAppHostCallWebViewReload);
       appHostCallHandlers.Add("apphost_reconnect.php",OnAppHostCallReconnect);
       appHostCallHandlers.Add("apphost_get_room_userlist.php",OnAppHostCallGetRoomUserList);
@@ -592,7 +593,7 @@ namespace PlayPhone.MultiNet.Core
           devUsersInfoSrc.Append(',');
           devUsersInfoSrc.Append(MNUtils.StringAsJSString(devUserInfo.userAuthSign));
           devUsersInfoSrc.Append(",'");
-          devUsersInfoSrc.Append(MNUtils.GetUnitTime(devUserInfo.lastLoginTime.Value).ToString());
+          devUsersInfoSrc.Append(MNUtils.GetUnixTime(devUserInfo.lastLoginTime.Value).ToString());
           devUsersInfoSrc.Append("',");
           devUsersInfoSrc.Append(MNUtils.StringAsJSString(devUserInfo.userAuxInfoText));
           devUsersInfoSrc.Append(')');
@@ -637,7 +638,7 @@ namespace PlayPhone.MultiNet.Core
       javaScriptSrc.Append(                 MNUtils.StringAsJSString(session.GetMyUserName())); javaScriptSrc.Append(',');
       javaScriptSrc.Append(                 MNUtils.StringAsJSString(session.GetMySId())); javaScriptSrc.Append(',');
       javaScriptSrc.Append(                 MNPlatformWinPhone.GetDeviceType().ToString()); javaScriptSrc.Append(',');
-      javaScriptSrc.Append(                 MNUtils.StringAsJSString(MNUtils.StringGetMD5String(MNPlatformWinPhone.GetUniqueDeviceIdentifier()))); javaScriptSrc.Append(',');
+      javaScriptSrc.Append(                 MNUtils.StringAsJSString(MNUtils.StringGetMD5String(session.GetUniqueAppId()))); javaScriptSrc.Append(',');
       javaScriptSrc.Append(                 "new Array("); javaScriptSrc.Append(getDeviceUsersInfoJSSrc()); javaScriptSrc.Append("),");
 
       //javaScriptSrc.Append(                 "new Array(new MN_SNSessionInfo(1,0,null)),");
@@ -1583,6 +1584,47 @@ namespace PlayPhone.MultiNet.Core
        });
      }
 
+    private void OnAppHostCallFacebookDialogGenericShow (Dictionary<string,string> queryParams)
+     {
+      string action        = GetQueryParamSafe(queryParams,"action");
+      string encodedParams = GetQueryParamSafe(queryParams,"params");
+      string successJS     = GetQueryParamSafe(queryParams,"mn_callback");
+      string cancelJS      = GetQueryParamSafe(queryParams,"mn_cancel");
+      string errorJS       = GetQueryParamSafe(queryParams,"mn_error");
+
+      if (action == null || encodedParams == null || successJS == null || cancelJS == null || errorJS == null)
+       {
+        MNDebug.debug("one or more parameters are not available in 'facebook generic dialog' request");
+
+        return;
+       }
+
+      if (session == null)
+       {
+        return;
+       }
+
+      Dictionary<string,string> dialogParams = MNUtils.HttpGetRequestParseParams(encodedParams);
+
+      session.GetSocNetSessionFB().ShowGenericDialog(action,dialogParams,(result) =>
+       {
+        string resultUri = result.ResultUri != null ? result.ResultUri.AbsoluteUri : null;
+
+        if (result.Cancelled)
+         {
+          CallJS(cancelJS.Replace("{cancel_bundle}",MNUtils.StringAsJSString(resultUri)));
+         }
+        else if (result.Succeeded)
+         {
+          CallJS(successJS.Replace("{result_bundle}",MNUtils.StringAsJSString(resultUri)));
+         }
+        else
+         {
+          CallJS(errorJS.Replace("{error_message}",result.ErrorMessage));
+         }
+       });
+     }
+
     private void OnAppHostCallVarSave (Dictionary<string,string> queryParams)
      {
       if (session != null)
@@ -1610,7 +1652,7 @@ namespace PlayPhone.MultiNet.Core
        }
      }
 
-    private string MakeConfigVarsList (Dictionary<string,string> vars)
+    private string MakeConfigVarsList (IDictionary<string,string> vars)
      {
       bool          first      = true;
       StringBuilder varListSrc = new StringBuilder();
@@ -1655,11 +1697,10 @@ namespace PlayPhone.MultiNet.Core
         return;
        }
 
-      Todo("add tracking vars to MN_ConfigVarUpdate call");
-
-      CallJS("MN_ConfigVarUpdate(new Array(),new Array(" +
-             MakeConfigVarsList
-              (session.GetAppConfigVars()) +
+      CallJS("MN_ConfigVarUpdate(new Array(" +
+             MakeConfigVarsList(session.GetTrackingSystem().TrackingVars) +
+             "),new Array(" +
+             MakeConfigVarsList(session.GetAppConfigVars()) +
             "))");
      }
 

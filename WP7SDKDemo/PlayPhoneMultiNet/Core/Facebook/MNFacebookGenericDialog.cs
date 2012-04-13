@@ -57,7 +57,7 @@ namespace PlayPhone.MultiNet.Core.Facebook
        {
         e.Cancel = true;
 
-        DismissDialogWithResult(new DialogResult(this));
+        DismissDialogWithResult(new DialogResult(this,e.Uri));
        }
      }
 

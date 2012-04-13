@@ -99,7 +99,7 @@ namespace PlayPhone.MultiNet.Core.WS
       wsParams["ctx_game_id"]    = session.GetGameId().ToString();
       wsParams["ctx_gameset_id"] = session.GetDefaultGameSetId().ToString();
       wsParams["ctx_dev_type"]   = MNPlatformWinPhone.GetDeviceType().ToString();
-      wsParams["ctx_dev_id"]     = MNUtils.StringGetMD5String(MNPlatformWinPhone.GetUniqueDeviceIdentifier());
+      wsParams["ctx_dev_id"]     = MNUtils.StringGetMD5String(session.GetUniqueAppId());
 
       if (authorized)
        {

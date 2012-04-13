@@ -7,17 +7,20 @@
 
 using System;
 using System.Windows;
-using System.Windows.Navigation;
+using System.Windows.Media;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Navigation;
+
 using System.ComponentModel;
 
 using Microsoft.Phone.Controls;
-using System.Windows.Controls;
-using System.Windows.Media;
+
+using PlayPhone.MultiNet.Core;
 
 namespace PlayPhone.MultiNet.Core.Facebook
  {
-  public abstract class MNFacebookDialog
+  public abstract class MNFacebookDialog : MNDialogStack.IDismissible
    {
     public delegate void DialogEventHandler (DialogResult result);
 
@@ -64,7 +67,7 @@ namespace PlayPhone.MultiNet.Core.Facebook
 
       dialogPopup.IsOpen = true;
 
-      StartBackButtonHandling();
+      MNDialogStack.AppendDialog(this);
      }
 
     public void Dismiss ()
@@ -93,10 +96,10 @@ namespace PlayPhone.MultiNet.Core.Facebook
 
     private void DismissPopup ()
      {
+      MNDialogStack.RemoveDialog(this);
+
       if (dialogPopup != null)
        {
-        StopBackButtonHandling();
-
         webBrowser.Loaded     -= OnBrowserLoaded;
         webBrowser.Navigating -= OnBrowserNavigating;
         webBrowser.Navigated  -= OnBrowserNavigated;
@@ -129,49 +132,17 @@ namespace PlayPhone.MultiNet.Core.Facebook
       OnBrowserNavigated(e);
      }
 
-    private void StartBackButtonHandling()
-     {
-      PhoneApplicationFrame rootVisual = Application.Current.RootVisual as PhoneApplicationFrame;
-
-      if (rootVisual != null)
-       {
-        rootVisual.BackKeyPress += OnBackKeyPress;
-       }
-     }
-
-    private void StopBackButtonHandling()
-     {
-      PhoneApplicationFrame rootVisual = Application.Current.RootVisual as PhoneApplicationFrame;
-
-      if (rootVisual != null)
-       {
-        rootVisual.BackKeyPress -= OnBackKeyPress;
-       }
-     }
-
-    private void OnBackKeyPress (object source, CancelEventArgs args)
-     {
-      if (dialogPopup != null)
-       {
-        args.Cancel = true;
-
-        DialogResult result = new DialogResult(this);
-
-        result.Cancel();
-
-        DismissDialogWithResult(result);
-       }
-     }
-
     public class DialogResult
      {
+      public Uri    ResultUri        { get; private set; }
       public bool   Cancelled        { get; private set; }
       public bool   Succeeded        { get; private set; }
       public string ErrorMessage     { get; private set; }
       public MNFacebookDialog Source { get; private set; }
 
-      public DialogResult (MNFacebookDialog dialog)
+      public DialogResult (MNFacebookDialog dialog, Uri resultUri = null)
        {
+        ResultUri    = resultUri;
         Source       = dialog;
         Cancelled    = false;
         Succeeded    = true;

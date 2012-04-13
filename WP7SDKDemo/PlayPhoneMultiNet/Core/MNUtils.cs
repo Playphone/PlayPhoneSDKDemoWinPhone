@@ -126,12 +126,27 @@ namespace PlayPhone.MultiNet.Core
 
     public static long GetUnixTime ()
      {
-      return (long)DateTime.Now.Subtract(epoch).TotalSeconds;
+      return GetUnixTime(DateTime.Now);
      }
 
-    public static long GetUnitTime (DateTime time)
+    public static long GetUnixTime (DateTime time)
      {
-      return (long)time.Subtract(new DateTime(1970,1,1)).TotalSeconds;
+      return (long)time.Subtract(epoch).TotalSeconds;
+     }
+
+    public static string GenerateUniqueId ()
+     {
+      StringBuilder builder = new StringBuilder();
+
+      builder.Append(Guid.NewGuid().ToString());
+      builder.Append(':');
+      builder.Append(GetUnixTime().ToString());
+      builder.Append(':');
+      builder.Append(DateTime.Now.Ticks.ToString());
+      builder.Append(':');
+      builder.Append((new Random()).Next().ToString());
+
+      return MNUtils.StringGetMD5String(builder.ToString());
      }
 
     public static V DictReadValue<K,V> (IDictionary<K,V> dict, K key)

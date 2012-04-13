@@ -43,6 +43,7 @@ namespace PlayPhone.MultiNet.Core
     public delegate void JoinRoomInvitationReceivedEventHandler (MNJoinRoomInvitationParams invParams);
     public delegate void GameMessageReceivedEventHandler (String message, MNUserInfo sender);
     public delegate void PluginMessageReceivedEventHandler (String pluginName, String message, MNUserInfo sender);
+    public delegate void AppBeaconResponseReceivedEventHandler (MNAppBeaconResponse response);
     public delegate void VShopReadyStatusChangedEventHandler (bool isVShopReady);
 
     public event SessionStatusChangedEventHandler       SessionStatusChanged;
@@ -73,6 +74,7 @@ namespace PlayPhone.MultiNet.Core
     public event JoinRoomInvitationReceivedEventHandler JoinRoomInvitationReceived;
     public event GameMessageReceivedEventHandler        GameMessageReceived;
     public event PluginMessageReceivedEventHandler      PluginMessageReceived;
+    public event AppBeaconResponseReceivedEventHandler  AppBeaconResponseReceived;
     public event VShopReadyStatusChangedEventHandler    VShopReadyStatusChanged;
 
     public MNSession (int gameId, string gameSecret)
@@ -93,6 +95,8 @@ namespace PlayPhone.MultiNet.Core
       fastResumeEnabled     = true;
       webShopIsReady        = false;
 
+      useInstallIdInsteadOfUDID = false;
+
       appExtParams = MNPlatformWinPhone.ReadAppExtParams();
 
       if (!MNPlatformWinPhone.CreateDataDirectory())
@@ -100,7 +104,7 @@ namespace PlayPhone.MultiNet.Core
         MNDebug.debug("warning: unable to create data dir");
        }
 
-      smartFoxFacade = new MNSmartFoxFacade(BuildConfigRequestUri());
+      smartFoxFacade = new MNSmartFoxFacade(this,BuildConfigRequestUri());
 
       smartFoxFacade.onPreLoginSucceeded = OnSmartFoxFacadePreLoginSucceeded;
       smartFoxFacade.onLoginSucceeded    = OnSmartFoxFacadeLoginSucceeded;
@@ -127,8 +131,10 @@ namespace PlayPhone.MultiNet.Core
       launchParam  = null;
 
       launchTime = MNUtils.GetUnixTime();
-      launchId   = BuildLaunchId();
+      launchId   = MNUtils.GenerateUniqueId();
+      installId  = LoadInstallId();
 
+      trackingSystem = null;
       appConfigVars = new Dictionary<string,string>();
 
       gameVocabulary = new MNGameVocabulary(this);
@@ -157,8 +163,7 @@ namespace PlayPhone.MultiNet.Core
 
       if (addDevId)
        {
-        //FIXME: cache dev_id somewhere to skip md5 calculation each time
-        queryParams["dev_id"] = MNUtils.StringGetMD5String(MNPlatformWinPhone.GetUniqueDeviceIdentifier());
+        queryParams["dev_id"] = MNUtils.StringGetMD5String(GetUniqueAppId());
        }
 
       foreach (var appExtParam in appExtParams)
@@ -174,7 +179,7 @@ namespace PlayPhone.MultiNet.Core
       return MNUtils.MakeGameSecretByComponents(secret1,secret2,secret3,secret4);
      }
 
-     private string MakeStructuredPasswordFromParams (string loginModel, string gameSecret, string passwordHash, bool userDevSetHome)
+     private MNSmartFoxFacade.StructuredPassword MakeStructuredPasswordFromParams (string loginModel, string gameSecret, string passwordHash, bool userDevSetHome)
      {
       string appVerInternal = MNPlatformWinPhone.GetAppVerInternal();
       string appVerExternal = MNPlatformWinPhone.GetAppVerExternal();
@@ -189,18 +194,18 @@ namespace PlayPhone.MultiNet.Core
         appVerExternal = "";
        }
 
-      return CLIENT_API_VERSION + "," +
-             loginModel + "," +
-             passwordHash + "," +
-             gameSecret + "," +
-             MNPlatformWinPhone.GetDeviceType().ToString() + "," +
-             MNUtils.StringGetMD5String
-              (MNPlatformWinPhone.GetUniqueDeviceIdentifier()) + "," +
-             (userDevSetHome ? "1" : "0") + "," +
-             MNPlatformWinPhone.GetDeviceInfoString().Replace(',','-') + "," +
-             (launchId + "|" +
-              appVerInternal.Replace('|',' ') + "|" +
-              appVerExternal.Replace('|',' ')).Replace(',','-');
+      return new MNSmartFoxFacade.StructuredPassword
+                  (CLIENT_API_VERSION + "," +
+                   loginModel + "," +
+                   passwordHash + "," +
+                   gameSecret + "," +
+                   MNPlatformWinPhone.GetDeviceType().ToString() + ",",
+                   "," +
+                   (userDevSetHome ? "1" : "0") + "," +
+                   MNPlatformWinPhone.GetDeviceInfoString().Replace(',','-') + "," +
+                   (launchId + "|" +
+                    appVerInternal.Replace('|',' ') + "|" +
+                    appVerExternal.Replace('|',' ')).Replace(',','-'));
      }
 
     private string MakeNewGuestPassword ()
@@ -209,26 +214,26 @@ namespace PlayPhone.MultiNet.Core
       DateTime now = DateTime.Now;
 
       return MNUtils.StringGetMD5String
-              (MNPlatformWinPhone.GetUniqueDeviceIdentifier() +
+              (Guid.NewGuid().ToString() +
                MNUtils.GetUnixTime().ToString() +
                now.Ticks.ToString() +
                rng.Next().ToString() +
                rng.Next().ToString());
      }
 
-    static private string BuildLaunchId ()
+    private string LoadInstallId ()
      {
-      StringBuilder builder = new StringBuilder();
+      string installId = varStorage.GetValue(INSTALL_ID_VAR_NAME);
 
-      builder.Append(MNPlatformWinPhone.GetUniqueDeviceIdentifier());
-      builder.Append(':');
-      builder.Append(MNUtils.GetUnixTime().ToString());
-      builder.Append(':');
-      builder.Append(DateTime.Now.Ticks.ToString());
-      builder.Append(':');
-      builder.Append((new Random()).Next().ToString());
+      if (installId == null)
+       {
+        installId = MNUtils.GenerateUniqueId();
 
-      return MNUtils.StringGetMD5String(builder.ToString());
+        varStorage.SetValue(INSTALL_ID_VAR_NAME,installId);
+        varStorage.WriteToFile();
+       }
+
+      return installId;
      }
 
     public bool LoginWithUserLoginAndPassword (string login, string password, bool saveCredentials)
@@ -353,7 +358,7 @@ namespace PlayPhone.MultiNet.Core
        }
      }
 
-    private bool LoginWithUserLoginAndStructuredPassword (string login, string structuredPassword)
+    private bool LoginWithUserLoginAndStructuredPassword (string login, MNSmartFoxFacade.StructuredPassword structuredPassword)
      {
       if (status != MNConst.MN_OFFLINE)
        {
@@ -439,6 +444,8 @@ namespace PlayPhone.MultiNet.Core
 
     public void Shutdown ()
      {
+      GetTrackingSystem().TrackShutdown(this);
+
       Logout();
 
       varStorage.WriteToFile();
@@ -671,7 +678,12 @@ namespace PlayPhone.MultiNet.Core
 
     public void SendAppBeacon (string actionName, string beaconData)
      {
-      MNDebug.NotImpl("MNSession.SendAppBeacon");
+      GetTrackingSystem().SendBeacon(actionName,beaconData,0,this);
+     }
+
+    public void SendAppBeacon (string actionName, string beaconData, long beaconCallSeqNumber)
+     {
+      GetTrackingSystem().SendBeacon(actionName,beaconData,beaconCallSeqNumber,this);
      }
 
     public void ExecAppCommand(string name, string param)
@@ -1194,6 +1206,25 @@ namespace PlayPhone.MultiNet.Core
 
     private void OnSmartFoxFacadeConfigLoaded ()
      {
+      useInstallIdInsteadOfUDID = smartFoxFacade.configData.useInstallIdInsteadOfUDID != 0;
+
+      MNTrackingSystem trackingSystem = GetTrackingSystem();
+
+      if (smartFoxFacade.configData.launchTrackerUrl != null)
+       {
+        trackingSystem.TrackLaunch(smartFoxFacade.configData.launchTrackerUrl,this);
+       }
+
+      if (smartFoxFacade.configData.shutdownTrackerUrl != null)
+       {
+        trackingSystem.SetShutdownUrlTemplate(smartFoxFacade.configData.shutdownTrackerUrl);
+       }
+
+      if (smartFoxFacade.configData.beaconTrackerUrl != null)
+       {
+        trackingSystem.SetBeaconUrlTemplate(smartFoxFacade.configData.beaconTrackerUrl);
+       }
+
       socNetSessionFB.SetAppId(smartFoxFacade.configData.facebookAppId);
 
       webServerUrl = smartFoxFacade.configData.webServerUrl;
@@ -1229,6 +1260,18 @@ namespace PlayPhone.MultiNet.Core
     private void OnSmartFoxFacadeConfigLoadFailed (string error)
      {
       DispatchErrorOccurred(MNErrorInfo.ACTION_CODE_LOAD_CONFIG,error);
+     }
+    #endregion
+
+    #region tracking system event handlers
+    private void OnAppBeaconResponseReceived (MNAppBeaconResponse response)
+     {
+      AppBeaconResponseReceivedEventHandler handler = AppBeaconResponseReceived;
+
+      if (handler != null)
+       {
+        handler(response);
+       }
      }
     #endregion
 
@@ -1275,6 +1318,48 @@ namespace PlayPhone.MultiNet.Core
       return varStorage;
      }
     #endregion
+
+    internal long GetLaunchTime ()
+     {
+      return launchTime;
+     }
+
+    internal string GetLaunchId ()
+     {
+      return launchId;
+     }
+
+    internal string GetInstallId ()
+     {
+      return installId;
+     }
+
+    public string GetUniqueAppId ()
+     {
+      if (useInstallIdInsteadOfUDID)
+       {
+        return installId;
+       }
+      else
+       {
+        return MNPlatformWinPhone.GetUniqueDeviceIdentifier();
+       }
+     }
+
+    internal MNTrackingSystem GetTrackingSystem ()
+     {
+      lock (thisLock)
+       {
+        if (trackingSystem == null)
+         {
+          trackingSystem = new MNTrackingSystem(this);
+
+          trackingSystem.AppBeaconResponseReceived += OnAppBeaconResponseReceived;
+         }
+
+        return trackingSystem;
+       }
+     }
 
     internal Dictionary<string,string> GetAppConfigVars ()
      {
@@ -2135,13 +2220,17 @@ namespace PlayPhone.MultiNet.Core
 
     private long             launchTime;
     private string           launchId;
-
+    private string           installId;
+    private bool             useInstallIdInsteadOfUDID;
     private bool             webShopIsReady;
 
+    private MNTrackingSystem                   trackingSystem;
     private Dictionary<string,string>          appConfigVars;
     private readonly Dictionary<string,string> appExtParams;
 
-    public const string CLIENT_API_VERSION  = "1_5_0";
+    private object                             thisLock = new object();
+
+    public const string CLIENT_API_VERSION  = "2_0_1";
 
     private const string SMARTFOX_EXT_NAME = "MultiNetExtension";
     private const string SF_EXTCMD_JOIN_BUDDY_ROOM       = "joinBuddyRoom";
@@ -2172,6 +2261,8 @@ namespace PlayPhone.MultiNet.Core
     private const string APP_COMMAND_SET_APP_PROPERTY_PREFIX = "set";
     private const string APP_PROPERTY_VAR_PATH_PREFIX = "prop.";
     private readonly int APP_COMMAND_SET_APP_PROPERTY_PREFIX_LEN = APP_COMMAND_SET_APP_PROPERTY_PREFIX.Length;
+
+    private const string INSTALL_ID_VAR_NAME = "app.install.id";
 
     private const string SF_GAME_ROOM_VAR_NAME_GAME_STATUS = "MN_game_status";
     private const string SF_GAME_ROOM_VAR_NAME_GAMESET_ID = "MN_gameset_id";

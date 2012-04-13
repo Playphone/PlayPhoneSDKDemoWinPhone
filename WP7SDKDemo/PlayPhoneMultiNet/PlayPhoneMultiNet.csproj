@@ -61,6 +61,7 @@
     <Compile Include="Core\Facebook\MNFacebookLoginDialog.cs" />
     <Compile Include="Core\Facebook\MNFacebookPermissionsDialog.cs" />
     <Compile Include="Core\Facebook\MNFacebookPublishDialog.cs" />
+    <Compile Include="Core\MNAppBeaconResponse.cs" />
     <Compile Include="Core\MNAppHostCallEventArgs.cs" />
     <Compile Include="Core\MNAppHostCallInfo.cs" />
     <Compile Include="Core\MNBuddyRoomParams.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Core\MNCurrGameResults.cs" />
     <Compile Include="Core\MNDashboardPanel.cs" />
     <Compile Include="Core\MNDebug.cs" />
+    <Compile Include="Core\MNDialogStack.cs" />
     <Compile Include="Core\MNGameResult.cs" />
     <Compile Include="Core\MNGameVocabulary.cs" />
     <Compile Include="Core\MNI18n.cs" />
@@ -80,6 +82,7 @@
     <Compile Include="Core\MNSmartFoxFacade.cs" />
     <Compile Include="Core\MNSocNetSessionFB.cs" />
     <Compile Include="Core\MNStrMaskStorage.cs" />
+    <Compile Include="Core\MNTrackingSystem.cs" />
     <Compile Include="Core\MNTrustedHosts.cs" />
     <Compile Include="Core\MNUIWebViewHttpReqQueue.cs" />
     <Compile Include="Core\MNURLDownloader.cs" />
@@ -181,9 +184,7 @@
     <Compile Include="Providers\MNWSProvider.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\multinet.plist">
-      <SubType>Designer</SubType>
-    </Resource>
+    <Resource Include="Assets\multinet.plist" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\MNDirectButton\mn_direct_button_bc_au.png" />

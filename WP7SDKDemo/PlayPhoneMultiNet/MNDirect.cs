@@ -20,6 +20,7 @@ namespace PlayPhone.MultiNet
     public delegate void DidReceiveGameMessageEventHandler  (string message, MNUserInfo sender);
     public delegate void ErrorOccurredEventHandler          (MNErrorInfo errorInfo);
     public delegate void ViewDoGoBackEventHandler           ();
+    public delegate void SessionReadyEventHandler           ();
 
     public static event DoStartGameWithParamsEventHandler DoStartGameWithParams;
     public static event DoFinishGameEventHandler          DoFinishGame;
@@ -28,6 +29,7 @@ namespace PlayPhone.MultiNet
     public static event DidReceiveGameMessageEventHandler DidReceiveGameMessage;
     public static event ErrorOccurredEventHandler         ErrorOccurred;
     public static event ViewDoGoBackEventHandler          ViewDoGoBack;
+    public static event SessionReadyEventHandler          SessionReady;
 
     public static void Init (int gameId, String gameSecret)
      {
@@ -37,7 +39,12 @@ namespace PlayPhone.MultiNet
 
       InitProviders();
 
-      MNDebug.todo("MNDirect.MNDirectSessionReady event is not supported");
+     SessionReadyEventHandler handler = SessionReady;
+
+      if (handler != null)
+       {
+        handler();
+       }
 
       view = new MNUserProfileView();
       view.DoGoBack += OnUserProfileViewDoGoBack;
