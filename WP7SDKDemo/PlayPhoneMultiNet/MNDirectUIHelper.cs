@@ -144,6 +144,13 @@ namespace PlayPhone.MultiNet
       MNDirectUIHelper.pageMode = pageMode;
       MNDirectUIHelper.parent   = layoutRoot;
 
+      MNPopupWindowManager.Instance.NavigatedTo
+       (page,
+        pageMode == PageMode.SILVERLIGHT ?
+         MNPopupWindowManager.PageMode.SILVERLIGHT :
+         MNPopupWindowManager.PageMode.XNA,
+        layoutRoot);
+
       DispatchNavigationEvent(NavigationEventArgs.EventType.NavigatedTo,page,pageMode,layoutRoot);
 
       if (isVisible)
@@ -160,6 +167,8 @@ namespace PlayPhone.MultiNet
        {
         CloseDashboard();
        }
+
+      MNPopupWindowManager.Instance.NavigatingFrom(page);
 
       DispatchNavigationEvent(NavigationEventArgs.EventType.NavigatingFrom,page,pageMode,parent);
 

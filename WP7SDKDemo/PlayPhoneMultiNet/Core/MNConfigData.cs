@@ -40,6 +40,7 @@ namespace PlayPhone.MultiNet.Core
       facebookAppId             = null;
       facebookSSOMode           = 0;
       launchTrackerUrl          = null;
+      installTrackerUrl          = null;
       shutdownTrackerUrl        = null;
       beaconTrackerUrl          = null;
       gameVocabularyVersion     = null;
@@ -83,6 +84,7 @@ namespace PlayPhone.MultiNet.Core
           facebookAppId         = parameters["FacebookAppId"];
           facebookSSOMode       = DictGetIntOpt(parameters,"FacebookSSOMode");
           launchTrackerUrl      = DictGetStringOpt(parameters,"LaunchTrackerURL");
+          installTrackerUrl     = DictGetStringOpt(parameters,"InstallTrackerURL");
           beaconTrackerUrl      = DictGetStringOpt(parameters,"BeaconTrackerURL");
           shutdownTrackerUrl    = DictGetStringOpt(parameters,"ShutdownTrackerURL");
           gameVocabularyVersion = DictGetStringOpt(parameters,"GameVocabularyVersion");
@@ -204,6 +206,7 @@ namespace PlayPhone.MultiNet.Core
     public string facebookAppId             { get; private set; }
     public int    facebookSSOMode           { get; private set; }
     public string launchTrackerUrl          { get; private set; }
+    public string installTrackerUrl         { get; private set; }
     public string beaconTrackerUrl          { get; private set; }
     public string shutdownTrackerUrl        { get; private set; }
     public string gameVocabularyVersion     { get; private set; }

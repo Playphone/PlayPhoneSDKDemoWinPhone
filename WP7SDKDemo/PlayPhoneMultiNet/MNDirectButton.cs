@@ -123,6 +123,11 @@ namespace PlayPhone.MultiNet
        }
      }
 
+    public static void setVShopEventAutoHandleEnabled (bool enable)
+     {
+      vShopDashboardHandlingEnabled = enable;
+     }
+
     private static void LazyInit ()
      {
       if (imageButton == null)
@@ -135,6 +140,12 @@ namespace PlayPhone.MultiNet
         MNDirectUIHelper.OnHideDashboard += OnDashboardHide;
 
         MNDirectUIHelper.OnPageNavigation += OnPageNavigation;
+
+        if (vShopDashboardHandlingEnabled)
+         {
+          MNDirect.GetVShopProvider().ShowDashboard += OnVShopShowDashboard;
+          MNDirect.GetVShopProvider().HideDashboard += OnVShopHideDashboard;
+         }
        }
      }
 
@@ -239,6 +250,16 @@ namespace PlayPhone.MultiNet
        }
      }
 
+    private static void OnVShopShowDashboard ()
+     {
+      MNDirectUIHelper.ShowDashboard();
+     }
+
+    private static void OnVShopHideDashboard ()
+     {
+      MNDirectUIHelper.HideDashboard();
+     }
+
     private const int VERT_BOTTOM_BIT = 0x01;
     private const int VERT_CENTER_BIT = 0x02;
     private const int HORZ_LEFT_BIT   = 0x04;
@@ -249,6 +270,7 @@ namespace PlayPhone.MultiNet
     private static ImageButton imageButton = null;
     private static bool        autoShow    = false;
     private static int         location    = MNDIRECTBUTTON_TOPRIGHT;
+    private static bool        vShopDashboardHandlingEnabled = true;
 
     #region ImageButton control
 

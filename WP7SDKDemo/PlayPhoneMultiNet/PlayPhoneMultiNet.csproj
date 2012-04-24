@@ -78,6 +78,8 @@
     <Compile Include="Core\MNMD5.cs" />
     <Compile Include="Core\MNOfflineScores.cs" />
     <Compile Include="Core\MNPlatformWinPhone.cs" />
+    <Compile Include="Core\MNPopupWindow.cs" />
+    <Compile Include="Core\MNPopupWindowManager.cs" />
     <Compile Include="Core\MNSession.cs" />
     <Compile Include="Core\MNSmartFoxFacade.cs" />
     <Compile Include="Core\MNSocNetSessionFB.cs" />

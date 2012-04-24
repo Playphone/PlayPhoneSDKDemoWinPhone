@@ -30,19 +30,28 @@ namespace PlayPhone.MultiNet.Core.Facebook
 
     public MNFacebookDialog ()
      {
-      dialogPopup = null;
+      popupWindow = new MNPopupWindow();
       webBrowser  = null;
      }
 
     public void Show ()
      {
-      if (dialogPopup != null)
+      if (popupWindow.IsVisible)
        {
         return; // already shown
        }
 
-      dialogPopup = new Popup();
+      CreateDialogContent();
 
+      popupWindow.Child = dialogContent;
+
+      MNDialogStack.AppendDialog(this);
+
+      popupWindow.Show();
+     }
+
+    private void CreateDialogContent ()
+     {
       Border border = new Border();
 
       border.BorderBrush     = new SolidColorBrush(Colors.Cyan);
@@ -51,28 +60,25 @@ namespace PlayPhone.MultiNet.Core.Facebook
       border.CornerRadius = new CornerRadius(DialogBorderWidth);
       border.Margin       = new Thickness(DialogMargin);
 
-      webBrowser  = new WebBrowser();
+      webBrowser = new WebBrowser();
 
       webBrowser.Loaded     += OnBrowserLoaded;
       webBrowser.Navigating += OnBrowserNavigating;
       webBrowser.Navigated  += OnBrowserNavigated;
 
       border.Child = webBrowser;
-      dialogPopup.Child  = border;
 
-      Size rootSize = Application.Current.RootVisual.RenderSize;
+      Size dialogSize = Application.Current.RootVisual.RenderSize;
 
-      border.Height = rootSize.Height - 2 * DialogMargin;
-      border.Width  = rootSize.Width  - 2 * DialogMargin;
+      border.Height = dialogSize.Height - 2 * DialogMargin;
+      border.Width  = dialogSize.Width  - 2 * DialogMargin;
 
-      dialogPopup.IsOpen = true;
-
-      MNDialogStack.AppendDialog(this);
+      dialogContent = border;
      }
 
     public void Dismiss ()
      {
-      if (dialogPopup != null)
+      if (popupWindow.IsVisible)
        {
         DialogResult result = new DialogResult(this);
 
@@ -98,15 +104,12 @@ namespace PlayPhone.MultiNet.Core.Facebook
      {
       MNDialogStack.RemoveDialog(this);
 
-      if (dialogPopup != null)
-       {
-        webBrowser.Loaded     -= OnBrowserLoaded;
-        webBrowser.Navigating -= OnBrowserNavigating;
-        webBrowser.Navigated  -= OnBrowserNavigated;
+      webBrowser.Loaded     -= OnBrowserLoaded;
+      webBrowser.Navigating -= OnBrowserNavigating;
+      webBrowser.Navigated  -= OnBrowserNavigated;
 
-        dialogPopup.IsOpen = false;
-        dialogPopup        = null;
-       }
+      popupWindow.Hide();
+      popupWindow = null;
      }
 
     private void OnBrowserLoaded (object sender, RoutedEventArgs e)
@@ -164,8 +167,10 @@ namespace PlayPhone.MultiNet.Core.Facebook
        }
      }
 
-    private Popup      dialogPopup;
-    private WebBrowser webBrowser;
+    private MNPopupWindow popupWindow;
+
+    private UIElement     dialogContent;
+    private WebBrowser    webBrowser;
 
     private const int DialogMargin      = 5;
     private const int DialogBorderWidth = 5;
