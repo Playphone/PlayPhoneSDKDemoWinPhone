@@ -502,7 +502,7 @@ namespace PlayPhone.MultiNet.Providers
           handler();
          }
        }
-      else if (cmdName == "onVShopNeedShowDashboard")
+      else if (cmdName == "onVShopNeedHideDashboard")
        {
         HideDashboardEventHandler handler = HideDashboard;
 
@@ -538,7 +538,7 @@ namespace PlayPhone.MultiNet.Providers
             DispatchCheckoutFailedEvent
              (MNUtils.ParseInt(MNUtils.DictReadValue(cmdParams,"error_code")) ?? CheckoutVShopPackFailInfo.ERROR_CODE_UNDEFINED,
               MNUtils.DictReadValue(cmdParams,"error_message") ?? "undefined error",
-              MNUtils.ParseLong(MNUtils.DictReadValue(cmdParams,"error_code")) ?? MNVItemsProvider.TRANSACTION_ID_UNDEFINED);
+              MNUtils.ParseLong(MNUtils.DictReadValue(cmdParams,"client_transaction_id")) ?? MNVItemsProvider.TRANSACTION_ID_UNDEFINED);
            }
          }
        }

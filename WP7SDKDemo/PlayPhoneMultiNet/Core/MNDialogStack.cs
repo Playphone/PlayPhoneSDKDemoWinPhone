@@ -34,15 +34,18 @@ namespace PlayPhone.MultiNet.Core
          {
           backButtonHandlingEnabled = value;
 
-          if (stack.Count > 0)
+          lock (thisLock)
            {
-            if (backButtonHandlingEnabled)
+            if (stack.Count > 0)
              {
-              StartBackButtonHandling();
-             }
-            else
-             {
-              StopBackButtonHandling();
+              if (backButtonHandlingEnabled)
+               {
+                StartBackButtonHandling();
+               }
+              else
+               {
+                StopBackButtonHandling();
+               }
              }
            }
          }

@@ -1215,6 +1215,11 @@ namespace PlayPhone.MultiNet.Core
         trackingSystem.TrackLaunch(smartFoxFacade.configData.launchTrackerUrl,this);
        }
 
+      if (smartFoxFacade.configData.installTrackerUrl != null)
+       {
+        trackingSystem.TrackInstallWithUrlTemplate(smartFoxFacade.configData.installTrackerUrl,this);
+       }
+
       if (smartFoxFacade.configData.shutdownTrackerUrl != null)
        {
         trackingSystem.SetShutdownUrlTemplate(smartFoxFacade.configData.shutdownTrackerUrl);
@@ -2230,7 +2235,7 @@ namespace PlayPhone.MultiNet.Core
 
     private object                             thisLock = new object();
 
-    public const string CLIENT_API_VERSION  = "2_0_1";
+    public const string CLIENT_API_VERSION  = "1_7_1";
 
     private const string SMARTFOX_EXT_NAME = "MultiNetExtension";
     private const string SF_EXTCMD_JOIN_BUDDY_ROOM       = "joinBuddyRoom";

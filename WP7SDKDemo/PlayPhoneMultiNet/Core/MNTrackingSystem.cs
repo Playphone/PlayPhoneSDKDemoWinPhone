@@ -29,6 +29,7 @@ namespace PlayPhone.MultiNet.Core
       beaconUrlTemplate   = null;
       shutdownUrlTemplate = null;
       launchTracked       = false;
+      installTracker      = new InstallTracker();
       trackingVars        = SetupTrackingVars(session);
      }
 
@@ -49,6 +50,11 @@ namespace PlayPhone.MultiNet.Core
       UrlTemplate launchUrlTemplate = new UrlTemplate(urlTemplate,trackingVars);
 
       launchUrlTemplate.SendLaunchTrackingRequest(session);
+     }
+
+    public void TrackInstallWithUrlTemplate (string urlTemplate, MNSession session)
+     {
+      installTracker.SetUrlTemplate(urlTemplate,trackingVars,session);
      }
 
     public void SetShutdownUrlTemplate (string urlTemplate)
@@ -164,6 +170,11 @@ namespace PlayPhone.MultiNet.Core
       public void SendLaunchTrackingRequest (MNSession session)
        {
         SendBeacon(null,null,session);
+       }
+
+      public void SendInstallTrackingRequest (MNSession session, AppBeaconResponseReceivedEventHandler responseHandler)
+       {
+        SendBeacon(null,null,0,session,responseHandler);
        }
 
       public void SendShutdownTrackingRequest (MNSession session)
@@ -403,10 +414,78 @@ namespace PlayPhone.MultiNet.Core
        }
      }
 
+    private class InstallTracker
+     {
+      public InstallTracker ()
+       {
+        session               = null;
+        requestInProgress     = false;
+        installAlreadyTracked = false;
+       }
+
+      public void SetUrlTemplate (string urlTemplate, Dictionary<string,string> trackingVars, MNSession session)
+       {
+        lock (thisLock)
+         {
+          if (requestInProgress || installAlreadyTracked)
+           {
+            return;
+           }
+
+          string timestamp = session.VarStorageGetValueForVariable(RESPONSE_TIMESTAMP_VARNAME);
+
+          if (timestamp != null)
+           {
+            installAlreadyTracked = true;
+
+            return;
+           }
+
+          requestInProgress = true;
+          this.session      = session;
+
+          UrlTemplate installUrlTemplate = new UrlTemplate(urlTemplate,trackingVars);
+
+          installUrlTemplate.SendInstallTrackingRequest(session,OnAppBeaconResponseReceived);
+         }
+       }
+
+      private void OnAppBeaconResponseReceived (MNAppBeaconResponse response)
+       {
+        lock (thisLock)
+         {
+          string responseText = response.ResponseText;
+
+          if (responseText != null)
+           {
+            if (session != null)
+             {
+              session.VarStorageSetValue(RESPONSE_TIMESTAMP_VARNAME,MNUtils.GetUnixTime().ToString());
+              session.VarStorageSetValue(RESPONSE_TEXT_VARNAME,Uri.EscapeUriString(responseText));
+
+              installAlreadyTracked = true;
+             }
+           }
+
+          requestInProgress = false;
+          session           = null;
+         }
+       }
+
+      private MNSession session;
+      private bool      requestInProgress;
+      private bool      installAlreadyTracked;
+      private object    thisLock = new object();
+
+      private const string RESPONSE_TIMESTAMP_VARNAME = "app.install.track.done";
+      private const string RESPONSE_TEXT_VARNAME      = "app.install.track.response";
+     }
+
     private bool                      launchTracked;
     private Dictionary<string,string> trackingVars;
     private UrlTemplate               beaconUrlTemplate;
     private UrlTemplate               shutdownUrlTemplate;
+    private InstallTracker            installTracker;
 
     private object thisLock = new object();
    }
