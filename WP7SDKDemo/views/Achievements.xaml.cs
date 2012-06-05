@@ -80,7 +80,22 @@ namespace WP7SDKDemo.views
 
         private void unlockAchievement(object sender, RoutedEventArgs e)
         {
-            MNDirect.GetAchievementsProvider().UnlockPlayerAchievement(Int32.Parse(achievement_id.Text));
+            try
+            {
+                MNDirect.GetAchievementsProvider().UnlockPlayerAchievement(Int32.Parse(achievement_id.Text));
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Wrong format");
+            }
+            catch (ArgumentNullException)
+            {
+                Console.WriteLine("Wrong value (null)");
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine("Value too big for integer");
+            }
         }
 
         private void onListUpdated()
